@@ -1,0 +1,28 @@
+version: "2.7"
+
+http:
+  address: 0.0.0.0:8000
+  middleware: ["headers"]
+  pool:
+    num_workers: 4
+    max_jobs: 128
+    allocate_timeout: 30s
+    destroy_timeout: 30s
+
+  static:
+    dir: "public"
+    forbid: [".php"]
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php artisan octane:start --server=roadrunner --host=127.0.0.1 --port=8000 --watch"
+
+logs:
+  mode: production
+  level: info
+
+headers:
+  response:
+    X-Powered-By: "RoadRunner"
