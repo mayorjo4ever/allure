@@ -23,7 +23,7 @@ use Carbon\Carbon; use App\Models\InvestigationTemplate;
                                 <th>Checked In Time <br/> <small>If Patient has Arrived</small> </th>
 <!--                                <th>Services </th>
                                 <th>Payments </th>-->
-                                <th>Action</th>
+                               @can('admit-patient') <th>Action</th>@endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -77,9 +77,9 @@ use Carbon\Carbon; use App\Models\InvestigationTemplate;
                                         @endif
                                     </td> -->
                                     <!-- <td><strong> {{ $amountPaid }} /  {{$totalFee}} </strong></td>-->
-                                     
+                                    @can('admit-patient') 
                                     <td> <a target="_blank" href="{{url('admin/appointments/'.$appointment->id.'/admitted')}}" class="btn btn-outline-success p-3 btn-sm">Admit </a></td>
-                                    
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>

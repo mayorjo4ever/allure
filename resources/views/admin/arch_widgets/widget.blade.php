@@ -2,8 +2,19 @@
     use Carbon\Carbon;
     $this_year = Carbon::now()->year;
 ?>
-<div class="row">
 
+
+@can('view-calendar-widget')
+<div class="row">
+    <div class="col-md-6 col-xl-4">
+      <div class="card mb-3 widget-content bg-grow-early">
+          <center> <div class="calendar w-100" ></div> </center>
+      </div>
+   </div>
+</div>@endcan
+
+
+<div class="row">
   @can('view-total-customer-widget')
    <div class="col-md-6 col-xl-4">
       <div class="card mb-3 widget-content bg-midnight-bloom">
@@ -93,7 +104,8 @@
          </div>
       </div>
    </div>  @endcan
-
+   
+ @can('view-total-pending-payment-widget')
    <div class="col-md-6 col-xl-4">
       <div class="card mb-3 widget-content bg-love-kiss">
          <div class="widget-content-wrapper text-white">
@@ -106,7 +118,9 @@
             </div>
          </div>
       </div>
-   </div>
+   </div> @endcan
+   
+   @can('view-total-payment-widget')
    <div class="col-md-6 col-xl-4">
       <div class="card mb-3 widget-content bg-grow-early">
          <div class="widget-content-wrapper text-white">
@@ -120,5 +134,7 @@
          </div>
       </div>
    </div>
+@endcan
+
 
 </div>

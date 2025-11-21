@@ -30,8 +30,8 @@
                         
                     @endphp
                     <td>{{$k}}</td>
-                    <td>{{$payment[0]['ticket_no']}} </td>
-                    <td>{{users_name($payment[0]['ticket']['customer_id'])}} </td>
+                    <td>{{$payment[0]['ticketno']}} </td>
+                    <td>{{users_name($payment[0]['ticket']['patient_id'])}} </td>
                     <td>{{number_format($payment[0]['ticket']['total_cost'])}} </td>                      
                     <td title="By Cash"> {{Arr::join($cashes,', ')}}</td>
                     <td title="By POS">{{Arr::join($pos,', ')}}</td>

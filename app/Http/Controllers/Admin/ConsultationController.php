@@ -28,14 +28,17 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Spatie\Permission\Traits\HasRoles;
 use function GuzzleHttp\json_encode;
+use function now;
 use function optional;
 use function response;
 use function view;
 
 class ConsultationController extends Controller
 {
-    //
+    use HasRoles;
+    
     public function new_appointment($ref_no = null){
         Session::put('page','services'); Session::put('subpage','new_app');        
         if($ref_no !=""): 
@@ -162,11 +165,26 @@ class ConsultationController extends Controller
     public function viewApprovedApps(){
         Session::put('page','services'); Session::put('subpage','app_confirmed');        
         $page_info = ['title'=>'All Confirmed Appointments','icon'=>'pe-7s-clock','sub-title'=> "  "];
-        $appointments = Appointment::with(['doctor','patient']) # ,'investigations.results'
+        $doctor = Auth('admin')->user();
+       
+       //  dd($doctor); die; 
+        
+        if($doctor->hasPermissionTo('view-all-appointed-patient')):
+            $appointments = Appointment::with(['doctor','patient']) # ,'investigations.results'
                 ->whereIn('status',['confirmed','checked_in','in_consultation','completed'])                 
                 ->orderBy('appointment_date','asc')
+                ->get();  
+        elseif($doctor->hasPermissionTo('view-own-appointed-patient')):
+            $appointments = Appointment::with(['doctor','patient']) # ,'investigations.results'
+                ->whereIn('status',['confirmed','checked_in','in_consultation','completed'])                 
+                ->where('doctor_id',$doctor->id)
+                ->orderBy('appointment_date','asc')
                 ->get(); 
-          # print "<pre>"; print_r($doctors); die;        
+        endif;
+        
+        
+         # print "<pre>"; 
+            ## print_r($doctors); die;        
         return view('admin.appointments.confirmed_apps',compact('page_info','appointments')); #
       
         /**
@@ -179,10 +197,20 @@ class ConsultationController extends Controller
     public function view_awaiters(){
         Session::put('page','services'); Session::put('subpage','app_waiters');        
         $page_info = ['title'=>'All Awaiting Patients','icon'=>'pe-7s-clock','sub-title'=> "  "];
-        $appointments = Appointment::with(['doctor','patient']) # 'investigations.results','prescriptions.item','bills'
-                ->whereIn('status',['checked_in','in_consultation','completed'])                 
+        
+        $doctor = Auth('admin')->user();
+        if($doctor->hasPermissionTo('view-all-appointed-patient')):
+           $appointments = Appointment::with(['doctor','patient']) # 'investigations.results','prescriptions.item','bills'
+                ->whereIn('status',['checked_in','in_consultation'])                 
                 ->orderBy('appointment_date','asc')
                 ->get(); 
+          elseif($doctor->hasPermissionTo('view-own-appointed-patient')):
+           $appointments = Appointment::with(['doctor','patient']) # 'investigations.results','prescriptions.item','bills'
+                ->whereIn('status',['checked_in','in_consultation'])                 
+                ->where('doctor_id',$doctor->id)
+                  ->orderBy('appointment_date','asc')
+                ->get(); 
+           endif;
           #print "<pre>"; print_r($appointments->toArray()); die;        
         return view('admin.appointments.all_waiters',compact('page_info','appointments')); #      
     }

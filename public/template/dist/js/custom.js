@@ -1137,7 +1137,8 @@ $(document).on('click','.text-template-submit-btn',function(){
     $('.dataTable').dataTable();
 
     initDatePicker();
-
+    
+    
 });
 
  function initDatePicker(){
@@ -1162,6 +1163,8 @@ $(document).on('click','.text-template-submit-btn',function(){
         dateFormat: "H:i",    // 24-hour format like 14:30
         time_24hr: false      // use 12-hour clock (AM/PM)
          });
+         
+      flatpickr(".calendar", {inline:true, dateFormat: "Y-m-d H:i"});
     }
 
 

@@ -1,7 +1,10 @@
 <?php
 # use Milon\Barcode\Facades\DNS1DFacade as DNS1D;
 ?>
-<div class="row"><div class="col-sm-12">
+<div class="row"><div class="col-sm-12"><br/>
+        <center>
+            <img src="data:image/png;base64,{{ $barcodeImage }}" alt="barcode" />
+        </center>
     <table class="table table-sm table-borderless">
         <tr align="center">
             <td></td>
@@ -69,7 +72,7 @@
                    <span class="text-uppercase">Payment Completed : <span class="pull-right font-weight-bold">{{ ($ticket_info->payment_completed) ? "Yes":"No" }}</span> </span> <br/>
                     <hr class="p-0 p-0 mt-1 mb-1"/>
                   <center> <?php $Collector ?>                  
-                   <img src="data:image/png;base64,{{ $barcodeImage }}" alt="barcode" />
+                   
                   Cashier: {{ admin_info(1)['fullname']}} 
                     
                   </center>

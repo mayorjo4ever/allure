@@ -174,19 +174,21 @@
                                 </i> Make New Appointment
                             </a>
                         </li> @endcan
-                        @can('view-appointments') @endcan
+                        @can('view-confirmed-appointments')
                         <li>
                             <a href="{{url('admin/appointments/confirmed')}}"  @if(Session::get('subpage')==="app_confirmed")  class="mm-active"  @endif>
                                 <i class="metismenu-icon">
                                 </i> Confirmed Appointments
                             </a>
-                        </li> 
+                        </li>  @endcan
+                        @can('view-awaiting-patients')
                         <li>
                             <a href="{{url('admin/appointments/await-doctor')}}"  @if(Session::get('subpage')==="app_waiters")  class="mm-active"  @endif>
                                 <i class="metismenu-icon">
-                                </i> Awaiting Doctor
+                                </i> Awaiting Patients
                             </a>
-                        </li> 
+                        </li>  @endcan
+                        
                         @if(Session::get('subpage')==="app_consulting")                        
                         <li>
                             <a href="{{url('admin/appointments/'.Session::get('app_id').'/admitted')}}"  @if(Session::get('subpage')==="app_consulting")  class="mm-active"  @endif>
@@ -202,8 +204,7 @@
                                 <i class="metismenu-icon">
                                 </i> Pending Investigations
                             </a>
-                        </li> 
-                        
+                        </li>                         
                         @endcan
                        
                     </ul>

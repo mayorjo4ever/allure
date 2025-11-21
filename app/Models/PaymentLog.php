@@ -12,6 +12,6 @@ class PaymentLog extends Model
     protected $fillable = ['ticket_no','appointment_id'];   
     
     public function ticket() {
-         return $this->belongsTo('App\Models\CustomerBill','appointment_id'); 
+         return $this->belongsTo('App\Models\CustomerBill','customer_bill_id'); 
     }
 }

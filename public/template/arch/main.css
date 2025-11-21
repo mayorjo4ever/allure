@@ -273,4 +273,12 @@ input:checked + .slider:before {
   label.radio-wrapper-8:hover input:checked + span:after {
     transform: scale(0.4);
   }
-  
+ /* for calendar widget*/
+    .calendar .flatpickr-calendar{
+        width:100% !important;
+        max-width:100% !important;
+    }
+      .calendar .flatpickr-innerContainer,
+      .calendar .flatpickr-rContainer
+        {width:100% !important;}
+</style>

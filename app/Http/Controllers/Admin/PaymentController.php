@@ -186,14 +186,13 @@ class PaymentController extends Controller
      public function fetch_ticket_payment_by_dates(Request $request) {
           if($request->ajax()){
             $data = $request->all(); 
-            # print "<pre>";             
+            #print "<pre>";             
             # print_r($data);  die;
             $dfrom = Carbon::parse($data['pay_sum_from'])->startOfDay();
             $dto = Carbon::parse($data['pay_sum_to'])->endOfDay();
              
-            $payments = PaymentLog::with(['ticket'
-                ])->whereBetween('date_paid',[$dfrom,$dto])->get()->groupBy('ticket_id')->toArray(); ## 
-            # print_r($payments);  die; 
+            $payments = PaymentLog::with(['ticket.user'])->whereBetween('date_paid',[$dfrom,$dto])->get()->groupBy('ticketno')->toArray(); ## 
+             #print_r($payments);  die; 
              return response()->json(['type'=>'success',
                 'view'=>(String)View::make('admin.tickets.payment.customer_paym_date_search_ajax')->with(compact('payments'))
                 ]);
