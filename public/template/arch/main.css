@@ -281,4 +281,14 @@ input:checked + .slider:before {
       .calendar .flatpickr-innerContainer,
       .calendar .flatpickr-rContainer
         {width:100% !important;}
-</style>
+   
+    .tox {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .ck-editor__editable_inline {
+        min-height: 300px !important;
+        max-height: 600px;
+        overflow-y: auto;
+    }

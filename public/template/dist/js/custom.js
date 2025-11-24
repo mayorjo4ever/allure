@@ -1142,30 +1142,35 @@ $(document).on('click','.text-template-submit-btn',function(){
 });
 
  function initDatePicker(){
-
+    if($(".datepicker").length >0){
     flatpickr('.datepicker', {weekNumbers: true, altInput: true,
     altFormat: "F j, Y",
     dateFormat: "Y-m-d H:i",
     // enableTime: true,
     // time_24hr: true
      });
-
-     flatpickr('.datetimepicker', {weekNumbers: true, altInput: true,
-        altFormat: "F j, Y H:i",
-        dateFormat: "Y-m-d H:i",
-         enableTime: true,
-         time_24hr: false
-         });
-         
+     }
+     
+//    if($(".datetimepicker").length >0){
+//     flatpickr('.datetimepicker', {weekNumbers: true, altInput: true,
+//        altFormat: "F j, Y H:i",
+//        dateFormat: "Y-m-d H:i",
+//         enableTime: true,
+//         time_24hr: false
+//         });
+//     }
+      if($(".timepicker").length >0){
        flatpickr('.timepicker', {weekNumbers: true, altInput: true,
         enableTime: true,     // enable time selection
         noCalendar: true,     // remove calendar, time picker only
         dateFormat: "H:i",    // 24-hour format like 14:30
         time_24hr: false      // use 12-hour clock (AM/PM)
          });
-         
+      }
+     if($(".calendar").length >0){ 
       flatpickr(".calendar", {inline:true, dateFormat: "Y-m-d H:i"});
-    }
+      }
+ }
 
 
     function save_selected_customer(regno='',custom_id=''){
@@ -1675,6 +1680,47 @@ function save_param_specimen_result() {
         }
     }
 
+    function reload_text_tinymce_old(elem='result_text',height=600){
+        
+        tinymce.init({
+            selector: 'textarea#'+elem,
+            height: height,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                     'bold italic underline backcolor | alignleft aligncenter ' +
+                     'alignright alignjustify | bullist numlist outdent indent | ' +
+                     'removeformat | table | help',
+
+            // Enable tables
+            table_toolbar: "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | " +
+                           "tableinsertcolbefore tableinsertcolafter tabledeletecol | cellprops celldelete",
+
+            // Paste into dark mode friendly
+            content_style: `
+              body { font-family:Helvetica,Arial,sans-serif; font-size:14px; }
+              .mce-content-body { background-color: #ffffff; color: #333333; }
+            `,
+
+            // Optional: Dark mode toggle
+            skin: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide',
+            content_css: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+
+            // Make dropdowns always show above containers
+            fixed_toolbar_container: '#tiny-editor-toolbar-wrapper', // optional wrapper
+            table_default_styles: {
+              width: '100%',
+              borderCollapse: 'collapse',
+              border: '1px solid #ccc'
+            }
+          });
+    }
+    
+    
     function reload_text_tinymce(elem='result_text',height=600){
     //  tinymce.EditorManager.editors = [];
         if(tinymce.execCommand('mceRemoveEditor', false, elem)) {
@@ -1694,11 +1740,41 @@ function save_param_specimen_result() {
     }
     
     function add_tinymce(){
-     setTimeout(function(){
-         reload_text_tinymce('complaint_form',250);   // 250 = height
-     },2000);
+//           window.setTimeout(function(){
+//             reload_text_tinymce('complaint_forms',250)  
+//           },2000);
+
+         ClassicEditor.create(document.querySelector('#editor'), {
+                toolbar: {
+                    items: [
+                        'undo', 'redo', '|',
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                        'specialCharacters', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'insertTable', '|',
+                        'tableColumn', 'tableRow', 'mergeTableCells', '|',
+                        'link', 'blockQuote', 'horizontalLine'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells',
+                        'tableProperties',
+                        'tableCellProperties'
+                    ]
+                }
+    })
+    .then(editor => window.editor = editor)
+    .catch(error => console.error(error));
+
+
+    
     }
 
+        
     function confirmDelete(module,moduleid,title){
           Swal.fire({
             title: 'Are you sure you want to delete this '+title+' '+module+' ?',
@@ -1758,7 +1834,6 @@ function showPaymode(cbox, divlem){
      }
 }
 
-   
 function submitPayment(forms){
     var paymodes = $('input:checkbox.paymode:checked').length;
     var btn = '.exec-payment-btn';
@@ -2155,7 +2230,7 @@ function filter_overall_report(forms){
  // Currency Separator
     var commaCounter = 10;
     function numberSeperator(elem,is_val=false) {
-        
+        let Number; 
         if(!is_val){
             Number = elem.val();
         }
@@ -2683,7 +2758,8 @@ function addConsultTasks(task="notes"){
         success: function (response) { 
             if(response.status==="success"){
                 $(".consult-body-container").html(response.view);   
-                add_tinymce()
+                add_tinymce();
+                // reload_text_tinymce('complaint_forms');
             }
         }, error:function(jhx,textStatus,errorThrown){ //stopLoader();
                 console.log(""+textStatus+' - '+errorThrown);
@@ -2703,7 +2779,7 @@ function addConsultTasks(task="notes"){
         success: function (response) {           
            //  showpop(response);
            elem.html(response.view);
-           // add_tinymce();
+            add_tinymce();
            var btn = $('.allSubBtn.active').click();
            
            general_body.html(response.body);
@@ -2721,7 +2797,7 @@ function addConsultTasks(task="notes"){
     // when doctor is commentingn on patient's complaint, after admitting  
     function save_doctors_comment(){
          tinymce.triggerSave(); btn = ".save-doctors-comment-btn";
-         var report = $('#complaint_form').val(); 
+         var report = $('#complaint_forms').val(); 
          var app_id = $('#app_id').val(); // appointment id
          var patient_id = $('#patient').val(); // user id
          var regno = $('#regno').val(); // user id
@@ -2750,7 +2826,8 @@ function addConsultTasks(task="notes"){
     }
     
     function repopcomment(comment){       
-       tinymce.get('complaint_form').setContent(comment);
+     //  tinymce.get('complaint_forms').setContent(comment);
+     $("#complaint_forms").val(comment);
     }
     
     function filter_qestionaires (question){
@@ -3099,3 +3176,12 @@ function addConsultTasks(task="notes"){
     }
   });
 }
+
+function add_summernote(){ 
+     tinymce.remove();
+
+    tinymce.init({
+        selector: ".tinymce",
+        height: 300
+    });
+} 

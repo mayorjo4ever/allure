@@ -137,6 +137,7 @@ use Carbon\Carbon;
 <div class="row mt-0 pt-0">
         <div class="col-md-12"> 
             @include('admin.arch_widgets.alert_messanger')
+            @include('admin.arch_widgets.summernote')
             @can('admit-patient')      
             
             <x-admin.card header="{!! $page_info['title'] !!}  |  Appointment Date : {{$appointment->appointment_date}}">

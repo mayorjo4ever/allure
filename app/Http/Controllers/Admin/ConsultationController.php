@@ -149,12 +149,23 @@ class ConsultationController extends Controller
          
     }
     ### view all appointments 
-    public function allAppointments($ref_no=null){
+    public function allAppointments(Request $request){
         Session::put('page','services'); Session::put('subpage','all_apps');        
         $page_info = ['title'=>'All Booked Appointments','icon'=>'pe-7s-clock','sub-title'=> "  "];
+        
+        if(Session::get('app_staus') == null):
+            Session::put('app_staus','pending');
+        endif;
+        
+        if($request->isMethod('post')):
+             Session::put('app_staus',$request->app_status);
+        endif;
+        
         $appointments = Appointment::with(['doctor','patient'])
+                ->where('status',Session::get('app_staus'))
                 ->orderBy('appointment_date','asc')
-                ->get(); 
+                ->paginate(20);
+         
           # print "<pre>"; print_r($doctors); die;
         $header = "All Appointment";
         return view('admin.appointments.all_apps',compact('page_info','appointments','header')); #
@@ -171,12 +182,12 @@ class ConsultationController extends Controller
         
         if($doctor->hasPermissionTo('view-all-appointed-patient')):
             $appointments = Appointment::with(['doctor','patient']) # ,'investigations.results'
-                ->whereIn('status',['confirmed','checked_in','in_consultation','completed'])                 
+                ->whereIn('status',['confirmed','checked_in'])   #,'in_consultation','completed'              
                 ->orderBy('appointment_date','asc')
                 ->get();  
         elseif($doctor->hasPermissionTo('view-own-appointed-patient')):
             $appointments = Appointment::with(['doctor','patient']) # ,'investigations.results'
-                ->whereIn('status',['confirmed','checked_in','in_consultation','completed'])                 
+                ->whereIn('status',['confirmed','checked_in'])    #,'in_consultation','completed'
                 ->where('doctor_id',$doctor->id)
                 ->orderBy('appointment_date','asc')
                 ->get(); 
@@ -220,9 +231,9 @@ class ConsultationController extends Controller
         $appointment->status = $status;
         $appointment->save();
         $email = optional($appointment->patient)->email; # if mail exists
-        if ($email) {
-            Mail::to($email)->send(new AppointmentStatusMail($appointment, $status));
-        }
+       # if ($email) {
+           # Mail::to($email)->send(new AppointmentStatusMail($appointment, $status));
+       # }
         return response()->json(['status' => 'success', 'message' => 'Appointment confirmed, and notification sent ']);
     }
     
@@ -318,7 +329,7 @@ class ConsultationController extends Controller
             elseif($consult_type === "prescriptions"):
              return response()->json([
                 'status'=>'success',
-                'view'=>(String)View::make('admin.appointments.ajax.adding_presription_body')]);
+                'view'=>(String)View::make('admin.appointments.ajax.adding_prescription_body')]);
         
         endif;
     }

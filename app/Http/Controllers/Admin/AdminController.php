@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use function admin_info;
 use function collect;
 use function now;
@@ -32,6 +33,7 @@ use function view;
 
 class AdminController extends Controller
 {
+    use HasRoles;
     public function __construct() {
         ## $this->middleware(['permission:view-admin','permission:create-admin']);
         if(Auth::guard('admin')->check()){
@@ -113,11 +115,20 @@ class AdminController extends Controller
     public function admins(){
        Session::put('page','admin_mgt'); Session::put('subpage','admin-staff');
        $page_info = ['title'=>'Administrative Staff','icon'=>'pe-7s-users','sub-title'=>'List of Administrative Staff'];
+       $me = Auth('admin')->user(); 
        $btns = [
             ['name'=>"Create New Staff",'action'=>"admin/add-edit-staff", 'class'=>'btn btn-success'],
             ['name'=>"Import More Staff",'action'=>"admin/staff/import", 'class'=>'btn btn-dark']
             ];
-       $admins = Admin::get(); // ->toArray();
+      
+       if($me->hasPermissionTo('view-all-admins')):
+            $admins = Admin::get(); // ->toArray();
+           elseif($me->hasPermissionTo('view-only-self')) :
+            $admins = Admin::where('id',$me->id)->get(); 
+           else :
+                $admins = []; 
+       endif;
+      
        
         #  $doctors = Admin::role('doctor')->get();       
         #  dd($doctors); 

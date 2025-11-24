@@ -121,7 +121,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('book-doctor-appointment', 'ConsultationController@book_doctor_appointment');        
         
         ## Appointments
-        Route::get('appointments', 'ConsultationController@allAppointments');                
+        Route::match(['get','post'],'appointments', 'ConsultationController@allAppointments');                
         Route::post('appointments/{id}/confirm', 'ConsultationController@confirmAppointment');
         Route::post('appointments/{id}/cancel', 'ConsultationController@cancelAppointment');
         Route::post('appointments/{id}/checkin', 'ConsultationController@checkinAppointment');

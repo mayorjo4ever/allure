@@ -6,6 +6,7 @@
 <div class="row mt-0 pt-0">
    <div class="col-lg-12">
       @include('admin.arch_widgets.alert_messanger')
+      @can('create-admin')
       
       <form class="needs-validation" novalidate  id="studentForm" @if(!empty($admin['id'])) action="{{url('admin/add-edit-staff/'.$admin['id'])}}" @else action="{{url('admin/add-edit-staff')}} " @endif  method="post">@csrf
       
@@ -103,9 +104,11 @@
          <!-- main-card --> 
       </div> <!-- col-md-7 -->
          
-      
-      
      </form> 
+     
+        @else 
+            <x-un-authorized-page/>
+        @endcan
    </div>
    <!-- col-lg-12 --> 
 </div>

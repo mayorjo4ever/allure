@@ -48,15 +48,19 @@
       <script type="text/javascript" src="{{asset('template/dist/js/custom.js')}}"></script>
       <script type="text/javascript" src="{{asset('template/dist/js/select2.min.js')}}"></script>
       <script src="{{url('front/js/spin.js')}}"></script>    
-      <script src="{{url('front/js/ladda.js')}}"></script>    
-      <script src="{{url('front/js/flatpickr.min.js')}}"></script>    
+      <script src="{{url('front/js/ladda.js')}}"></script>         
       <script type="text/javascript" src="{{asset('template/arch/assets/scripts/bootstrap.bundle.min.js')}}"></script>
-
+     
+   
+      
       @stack('scripts') 
-     @if(in_array(Session::get('subpage'),['bill-template-setup','app_consulting']))
-        <script src="{{url('template/dist/tinymce/js/tinymce/tinymce.min.js')}}"> </script>
-        <!--<script src="{{url('template/tinymce/themes/modern/theme.js')}}"> </script>-->
+     @if(in_array(Session::get('subpage'),['bill-template-setup','app_consulting']))      
+     <!--<script src="https://cdn.jsdelivr.net/npm/tinymce@6.7.0/tinymce.min.js"></script>-->
+   <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>
+
+     <!--<script src="{{url('template/dist/tinymce/js/tinymce/tinymce.min.js')}}"></script>-->
     @endif
+     <script src="{{url('front/js/flatpickr.min.js')}}"></script>    
     <script>
                 // Example starter JavaScript for disabling form submissions if there are invalid fields
                 (function() {
