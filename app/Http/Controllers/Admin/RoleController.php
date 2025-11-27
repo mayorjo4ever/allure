@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Middleware\RoleMiddleware;
+
 use function redirect;
 use function response;
 use function view;

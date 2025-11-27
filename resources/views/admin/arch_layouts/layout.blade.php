@@ -56,8 +56,8 @@
       @stack('scripts') 
      @if(in_array(Session::get('subpage'),['bill-template-setup','app_consulting']))      
      <!--<script src="https://cdn.jsdelivr.net/npm/tinymce@6.7.0/tinymce.min.js"></script>-->
-   <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>
-
+      <!--<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>-->
+    
      <!--<script src="{{url('template/dist/tinymce/js/tinymce/tinymce.min.js')}}"></script>-->
     @endif
      <script src="{{url('front/js/flatpickr.min.js')}}"></script>    
@@ -82,12 +82,12 @@
                 })();
             </script>
      
-            </script>
        @if(in_array(Session::get('subpage'),['customer-add','families',
        'admin-staff','app_consulting']))
         @include('admin.arch_widgets.modals')
        @endif
         
-        
+        <script src="{{asset('template/dist/ckeditor5-build-classic/ckeditor.js')}}"></script>
+  
    </body>
 </html>

@@ -758,9 +758,8 @@ $(document).on('click','.text-template-submit-btn',function(){
                     showPaymode('cash', 'cashmode');
                     showPaymode('pos', 'posmode');
                     showPaymode('transfer', 'transfermode');
-                    //
-              }
-            },
+                 }
+             },
             error:function(jhx,textStatus,errorThrown){ stopLoader(btn); stopLoader();
                 checkStatus(jhx.status); }
             });
@@ -1740,35 +1739,61 @@ function save_param_specimen_result() {
     }
     
     function add_tinymce(){
-//           window.setTimeout(function(){
-//             reload_text_tinymce('complaint_forms',250)  
-//           },2000);
 
-         ClassicEditor.create(document.querySelector('#editor'), {
-                toolbar: {
-                    items: [
-                        'undo', 'redo', '|',
-                        'heading', '|',
-                        'bold', 'italic', 'underline', 'strikethrough', '|',
-                        'specialCharacters', '|',
-                        'bulletedList', 'numberedList', '|',
-                        'insertTable', '|',
-                        'tableColumn', 'tableRow', 'mergeTableCells', '|',
-                        'link', 'blockQuote', 'horizontalLine'
-                    ]
-                },
-                table: {
-                    contentToolbar: [
-                        'tableColumn',
-                        'tableRow',
-                        'mergeTableCells',
-                        'tableProperties',
-                        'tableCellProperties'
-                    ]
-                }
-    })
-    .then(editor => window.editor = editor)
-    .catch(error => console.error(error));
+//      	ClassicEditor
+//		.create( document.querySelector( '#complaint_forms' ), {
+//			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+//		} )
+//		.then( editor => {
+//			window.editor = editor;
+//		} )
+//		.catch( err => {
+//			console.error( err.stack );
+//		} );
+
+        ClassicEditor
+        .create(document.querySelector('#complaint_forms'), {
+            toolbar: {
+                items: [
+                    'undo', 'redo', '|',
+                    'heading', 'bold', 'italic', 'underline', '|',
+                    'link', 'blockQuote', '|',
+                    'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
+                    'sourceEditing'
+                ]
+            },
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+                ]
+            },
+            table: {
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                ]
+            },
+            htmlSupport: {
+                allow: [
+                    {
+                        name: /.*/,       // allow all tags
+                        attributes: true, // allow all attributes
+                        classes: true,    // allow all classes
+                        styles: true      // allow inline styles
+                    }
+                ]
+            }
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
 
 
     
@@ -3178,10 +3203,16 @@ function addConsultTasks(task="notes"){
 }
 
 function add_summernote(){ 
-     tinymce.remove();
-
-    tinymce.init({
-        selector: ".tinymce",
-        height: 300
-    });
+   
+	ClassicEditor
+		.create( document.querySelector( '#complaint_forms' ), {
+			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+		} )
+		.then( editor => {
+			window.editor = editor;
+		} )
+		.catch( err => {
+			console.error( err.stack );
+		} );  
+     
 } 
