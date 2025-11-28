@@ -1739,17 +1739,10 @@ function save_param_specimen_result() {
     }
     
     function add_tinymce(){
-
-//      	ClassicEditor
-//		.create( document.querySelector( '#complaint_forms' ), {
-//			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-//		} )
-//		.then( editor => {
-//			window.editor = editor;
-//		} )
-//		.catch( err => {
-//			console.error( err.stack );
-//		} );
+        
+        if(window.editor){
+            window.editor.destroy();
+        }
 
         ClassicEditor
         .create(document.querySelector('#complaint_forms'), {
@@ -2783,8 +2776,7 @@ function addConsultTasks(task="notes"){
         success: function (response) { 
             if(response.status==="success"){
                 $(".consult-body-container").html(response.view);   
-                add_tinymce();
-                // reload_text_tinymce('complaint_forms');
+               // add_tinymce();                
             }
         }, error:function(jhx,textStatus,errorThrown){ //stopLoader();
                 console.log(""+textStatus+' - '+errorThrown);
@@ -2804,7 +2796,7 @@ function addConsultTasks(task="notes"){
         success: function (response) {           
            //  showpop(response);
            elem.html(response.view);
-            add_tinymce();
+           // add_tinymce();
            var btn = $('.allSubBtn.active').click();
            
            general_body.html(response.body);
@@ -2821,8 +2813,9 @@ function addConsultTasks(task="notes"){
 
     // when doctor is commentingn on patient's complaint, after admitting  
     function save_doctors_comment(){
-         tinymce.triggerSave(); btn = ".save-doctors-comment-btn";
-         var report = $('#complaint_forms').val(); 
+         // tinymce.triggerSave();
+         btn = ".save-doctors-comment-btn";
+         var report = window.editor.getData(); 
          var app_id = $('#app_id').val(); // appointment id
          var patient_id = $('#patient').val(); // user id
          var regno = $('#regno').val(); // user id
@@ -2852,7 +2845,7 @@ function addConsultTasks(task="notes"){
     
     function repopcomment(comment){       
      //  tinymce.get('complaint_forms').setContent(comment);
-     $("#complaint_forms").val(comment);
+       window.editor.setData(comment); 
     }
     
     function filter_qestionaires (question){
@@ -3201,18 +3194,18 @@ function addConsultTasks(task="notes"){
     }
   });
 }
-
-function add_summernote(){ 
-   
-	ClassicEditor
-		.create( document.querySelector( '#complaint_forms' ), {
-			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-		} )
-		.then( editor => {
-			window.editor = editor;
-		} )
-		.catch( err => {
-			console.error( err.stack );
-		} );  
-     
-} 
+//
+//function add_summernote(){ 
+//   
+//	ClassicEditor
+//		.create( document.querySelector( '#complaint_forms' ), {
+//			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+//		} )
+//		.then( editor => {
+//			window.editor = editor;
+//		} )
+//		.catch( err => {
+//			console.error( err.stack );
+//		} );  
+//     
+//} 

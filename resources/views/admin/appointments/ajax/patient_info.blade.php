@@ -26,7 +26,7 @@
                                   </tr> <tr><th class="table-light" >Age </th>
                                       <td>{{ calc_age($info->dob) }}</td>
                                   </tr>
-                                  </tr> <tr><th  >Gender </th>
+                                  </tr> <tr><th>Gender </th>
                                       <td>{{ucwords($info->sex) }}</td>
                                   </tr>
                                   </tr> <tr><th class="table-light" >Nationality </th>

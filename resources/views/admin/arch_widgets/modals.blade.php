@@ -145,3 +145,9 @@
  <x-admin.modal id="view-investigation-result" title="Investigaton Result" size="lg">
     <div id="invest-result"></div>
  </x-admin.modal>
+
+ <x-admin.modal id="write-doctors-report" title="Doctor's Report" size="lg">
+    <textarea id="complaint_forms"  name="complaint_forms" rows="4" placeholder="Complaints / Questions & Answers / Inquiries " class="form-control tinymce form-textarea"></textarea>
+    <button onclick="save_doctors_comment()" class="btn btn-outline-primary w-100 font-weight-800 ladda-button p-2 mt-2 save-doctors-comment-btn" data-style="expand-right" type="button"> Save Report </button>
+
+ </x-admin.modal>

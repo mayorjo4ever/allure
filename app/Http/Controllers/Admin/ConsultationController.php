@@ -89,7 +89,7 @@ class ConsultationController extends Controller
                 }
                $start = Carbon::parse($availability->start_time);
                $end   = Carbon::parse($availability->end_time);
-               $interval = 20; $now = Carbon::now(); // new
+               $interval = 5; $now = Carbon::now(); // new
 
                 $slots = [];
                 while ($start->lessThan($end)) {
@@ -354,6 +354,7 @@ class ConsultationController extends Controller
     
     // when doctor's making comment during appointment
     public function  save_doctors_comment(Request $request,$patient_id,$app_id) {
+       // print "<pre>"; print_r($request->all()); exit;
         $doctorId = Auth()->id();
         $rules = [
                 'report'=>"required|string|min:50",                
@@ -381,7 +382,7 @@ class ConsultationController extends Controller
         
         return response()->json([
             'status'=>'success',
-            'message'=> " Comment Successfully  Saved "            
+            'message'=> " Report Successfully  Saved "            
         ]);
     }
     

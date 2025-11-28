@@ -5,7 +5,7 @@
         <h4  class="card-title bg-light p-2">Notes / Comment</h4>      
             {!! $appointment->consultation->complaint !!}
             &nbsp;&nbsp;
-            <span class="pointer text-primary" onclick="repopcomment($(this).attr('dataText'))" dataText="{{$appointment->consultation->complaint}}">Modify &nbsp; <span class="pe pe-7s-pen pe-2x"></span></span>
+            <span data-toggle="modal" data-target="#write-doctors-report" class="pointer text-primary" onclick="repopcomment($(this).attr('dataText'))" dataText="{{$appointment->consultation->complaint}}">Modify &nbsp; <span class="pe pe-7s-pen pe-2x"></span></span>
     </div>
    @else -- No Comment --
    @endif

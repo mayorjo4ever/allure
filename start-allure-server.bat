@@ -30,7 +30,7 @@ start http://%local_ip%:%port%
 cd /d "D:\xampp8\htdocs\allure"
 
 :: Start Laravel server
-php artisan optimize
+:: php artisan optimize
 php artisan serve --host=%local_ip% --port=%port%
 
 pause
