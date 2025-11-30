@@ -2653,7 +2653,7 @@ function getPatientInfo(info_type="consultation"){
     });    
 }
 
- let custom_id = $('#custom_id').val();
+ let custom_id = $('#user_id').val();
     if(custom_id !=="") {
         populateCustomerBiodata(custom_id);
     }
@@ -2677,7 +2677,7 @@ function populateCustomerBiodata(custom_id){
            $("#user-othername").val(response.othername);
            $("#"+response.sex+"_sex").val(response.sex).prop('checked',true);
            $("#dob").val(response.dob);
-           $("#dob").val(response.dob);
+          // $("#dob").val(response.dob);
            $("#user-phone").val(response.phone);
            $("#user-email").val(response.email);
            $("#user-occupation").val(response.occupation);

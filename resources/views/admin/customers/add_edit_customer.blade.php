@@ -9,7 +9,7 @@
        @can('create-customer')
     
        <x-admin.card header="Customer Bio-Data">
-           <input id="custom_id" name="custom_id" type="hidden" value="{{$student->id}}"/>
+           <input id="user_id" name="user_id" type="hidden" value="{{$student->id}}"/>
            <span class="ajaxLoader"></span>
         <x-admin.customer-basic-form></x-admin.customer-basic-form>         
        </x-admin.card>
