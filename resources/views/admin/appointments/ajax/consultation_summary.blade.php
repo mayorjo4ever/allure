@@ -3,7 +3,7 @@
    @if(!empty($appointment->consultation))
     <div class="col-md-12">
         <h4  class="card-title bg-light p-2">Notes / Comment</h4>      
-            {!! $appointment->consultation->complaint !!}
+            {{-- $appointment->consultation->complaint --}}
             &nbsp;&nbsp;
             <span data-toggle="modal" data-target="#write-doctors-report" class="pointer text-primary" onclick="repopcomment($(this).attr('dataText'))" dataText="{{$appointment->consultation->complaint}}">Modify &nbsp; <span class="pe pe-7s-pen pe-2x"></span></span>
     </div>
@@ -29,8 +29,7 @@
                 </ul> 
                @else 
                <span class="ml-4">Ans: <strong> {{ucwords($question->answer)}} </strong></span>
-               @endif
-           
+               @endif           
           </div>
      
          

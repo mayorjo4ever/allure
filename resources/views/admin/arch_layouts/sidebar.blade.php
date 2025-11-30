@@ -206,6 +206,15 @@
                             </a>
                         </li>                         
                         @endcan
+                        
+                        @can('view-consultation-notes')
+                         <li>
+                            <a href="{{url('admin/appointments/consultationnotes')}}"  @if(Session::get('subpage')==="consultation_notes")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> Consultation Notes
+                            </a>
+                        </li> 
+                        @endcan
                        
                     </ul>
                 </li>
@@ -283,7 +292,35 @@
                         @endcan
                     </ul>
                 </li>
-               @endcan              
+               @endcan     
+               
+                @can('view-frames')
+                <li>
+                    <a href="#" @if(Session::get('page')==="frames") class="mm-active" @endif >
+                        <i class="metismenu-icon pe-7s-glasses font-weight-700"></i>
+                       FRAMES
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    <ul  @if(Session::get('page')==="frames") class="mm-show" @endif >
+                      @can('view-frames')
+                        <li>
+                            <a href="{{url('admin/frames')}}" @if(Session::get('subpage')==="frames")  class="mm-active"  @endif >
+                                <i class="metismenu-icon"></i>
+                                All Frames
+                            </a>
+                        </li> @endcan 
+                    
+                      @can('create-new-frames')
+                        <li>
+                            <a href="{{url('admin/add-edit-frames')}}" @if(Session::get('subpage')==="add-frames")  class="mm-active"  @endif >
+                                <i class="metismenu-icon"></i>
+                                 Create New Frames
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+               @endcan    
                   
                @can('view-tests')
                 <li>

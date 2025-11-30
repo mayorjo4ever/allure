@@ -72,7 +72,7 @@
    <!-- col-sm-6 -->
    <div class="col-sm-6 mb-3">
       <label for="title"  class="font-weight-600"> Age &nbsp;/&nbsp; Date of Birth&nbsp;  </label>
-      <input value=" type="text" name="dob" id="dob" class="form-control datetimepicker bg-white" placeholder="Date of Birth" required >       
+      <input value="" type="text" name="dob" id="dob" class="form-control datetimepicker bg-white" placeholder="Date of Birth" required >       
       <div class="invalid-feedback"> 
          Provide Date of birth
       </div>   <button data-toggle="modal" data-target=".age_calc" type="button" class="btn btn-lg btn-light mt-1"> <i class="fa fa-calculator"></i> </button>

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\AppointmentStatusMail;
 use App\Models\Admin;
 use App\Models\Appointment;
 use App\Models\BillType;
 use App\Models\Consultation;
+use App\Models\ConsultationNote;
 use App\Models\CustomerBill;
 use App\Models\DoctorAvailability;
 use App\Models\Drug;
+use App\Models\Frame;
 use App\Models\InvestigationTemplate;
 use App\Models\Lense;
 use App\Models\PatientInvestigation;
@@ -24,7 +25,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
@@ -32,12 +32,27 @@ use Spatie\Permission\Traits\HasRoles;
 use function GuzzleHttp\json_encode;
 use function now;
 use function optional;
+use function redirect;
 use function response;
 use function view;
 
 class ConsultationController extends Controller
 {
     use HasRoles;
+    
+    public function manage_consultation_notes(Request $request){
+        Session::put('page','services'); Session::put('subpage','consultation_notes');        
+        $page_info = ['title'=>'Manage Consultation Notes','icon'=>'pe-7s-pen','sub-title'=> "  "];
+        $notes = ConsultationNote::first(); 
+        ## when submitting
+        if($request->isMethod('post')):
+            ConsultationNote::where('id',1)
+                ->update(['notes'=>$request->complaint_forms]);
+        return redirect()->back()->with('success_message','Note Updated Successfully');
+        endif;
+        return view('admin.appointments.consultation_notes',compact('page_info','notes')); #
+    }
+
     
     public function new_appointment($ref_no = null){
         Session::put('page','services'); Session::put('subpage','new_app');        
@@ -275,7 +290,7 @@ class ConsultationController extends Controller
     
     public function getPatentInfo(Request $request,$id) {
         $info_type = $request->info_type;
-        #print "<pre>";  print $id; print $info_type; 
+       # print "<pre>";  print_r($request->all()); die; print $info_type; 
         
         if($info_type === "profile"):            
             $info = User::find($id); 
@@ -303,12 +318,15 @@ class ConsultationController extends Controller
     
     public function addConsultTasks(Request $request,$id) {
         $consult_type = $request->input('consult_type');
-        # print "<pre>";  print $id; print_r($consult_type) ;  die; 
+        # print "<pre>";  print_r($request->all()) ;  print $id;  die; 
         # we have questionnaire,notes,investigations,diagnosis,prescriptions
-        if($consult_type === "notes"):                        
+        if($consult_type === "notes"):  
+             $appointment = Appointment::with(['consultation'])
+                 ->findOrFail($request->app_id);
+                $default_note = ConsultationNote::first();
             return response()->json([
                 'status'=>'success',
-                'view'=>(String)View::make('admin.appointments.ajax.notes_body')]);
+                'view'=>(String)View::make('admin.appointments.ajax.notes_body',compact('appointment','default_note'))]);
         
             elseif($consult_type === "questionnaire"):
                 return response()->json([
@@ -392,9 +410,10 @@ class ConsultationController extends Controller
              'investigations.results','prescriptions.item','bills'])
                  ->findOrFail($data['app_id']);
          $billings = BillType::where('status',1)->get();
+         $default_note = ConsultationNote::first();
          return response()->json([
             'status'=>'success',
-             'body'=>(String)View::make('admin.appointments.ajax.notes_body'),
+             'body'=>(String)View::make('admin.appointments.ajax.notes_body',compact('appointment','default_note')),
              'view'=>(String)View::make('admin.appointments.ajax.consultation_summary',compact('appointment','billings'))
              ]);             
         }
@@ -546,8 +565,20 @@ class ConsultationController extends Controller
                 $lens->type = $lens->type_name; // from accessor
                 return $lens;
             });
+            $frames = Frame::where('name', 'like', "%{$query}%")
+            ->select('id', 'name', 'sales_price', 'qty_rem')
+            ->get()
+            ->map(function ($frame) {
+                $frame->type = 'frame';
+                return $frame;
+            }); 
+            
         // Merge & return
-        $results = $drugs->concat($lenses)->values();
+         $results = $drugs
+        ->concat($lenses)
+        ->concat($frames)
+        ->values();
+
         return response()->json($results);
     }
     
@@ -570,7 +601,11 @@ class ConsultationController extends Controller
             foreach ($validated['prescriptions'] as $item) {
                 if ($item['item_type'] === 'drug') {
                     $product = Drug::find($item['item_id']);
-                } else {
+                }
+                else if ($item['item_type'] === 'frame') {
+                    $product = Frame::find($item['item_id']);
+                }
+                else {
                     $product = Lense::find($item['item_id']);
                 }
                 // Disallow prescribing more than available
@@ -580,7 +615,7 @@ class ConsultationController extends Controller
                         'message' => "Cannot prescribe more than available stock for {$product->name}"
                     ]);
                 }
-
+                $profit = ($product->sales_price - $product->purchase_price) * $item['quantity'];
                 Prescription::create([
                     'appointment_id' => $validated['app_id'],
                     'patient_id' => $validated['patient_id'],
@@ -591,6 +626,8 @@ class ConsultationController extends Controller
                     'type_name' => $item['item_type'] === 'lens' ? $product->type_name : null,
                     'quantity' => $item['quantity'],
                     'unit_price' => $product->sales_price,                   
+                    'purchase_price' => $product->purchase_price,                   
+                    'profit' => $profit,                   
                     'total_price' => $product->sales_price * $item['quantity'],
                     'dosage' => $item['dosage'],
                 ]);

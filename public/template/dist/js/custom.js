@@ -44,7 +44,7 @@ $(function(){
       show_pending_tickets(); 
     }
     
-    hideInactiveTables();
+    hideInactiveTables(); add_tinymce();
 
     var log_messager = $("#login-message"); log_messager.hide('fast');
     $('#loginForm').submit(function(ev){ ev.preventDefault();
@@ -1150,14 +1150,14 @@ $(document).on('click','.text-template-submit-btn',function(){
      });
      }
      
-//    if($(".datetimepicker").length >0){
-//     flatpickr('.datetimepicker', {weekNumbers: true, altInput: true,
-//        altFormat: "F j, Y H:i",
-//        dateFormat: "Y-m-d H:i",
-//         enableTime: true,
-//         time_24hr: false
-//         });
-//     }
+    if($(".datetimepicker").length >0){
+     flatpickr('.datetimepicker', {weekNumbers: true, altInput: true,
+        altFormat: "F j, Y H:i",
+        dateFormat: "Y-m-d H:i",
+         enableTime: true,
+         time_24hr: false
+         });
+     }
       if($(".timepicker").length >0){
        flatpickr('.timepicker', {weekNumbers: true, altInput: true,
         enableTime: true,     // enable time selection
@@ -2637,7 +2637,7 @@ function getPatientInfo(info_type="consultation"){
      $.ajax({
         headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
         url: '/admin/appointments/get-patient-info/'+patient_id,
-        type: 'POST', data: { info_type:info_type },
+        type: 'POST', data: { info_type:info_type,app_id:app_id },
         beforeSend:function(){$(".data-body").html(process);  },
         success: function (response) {           
             if(response.status==="success"){
@@ -2653,14 +2653,21 @@ function getPatientInfo(info_type="consultation"){
     });    
 }
 
+ let custom_id = $('#custom_id').val();
+    if(custom_id !=="") {
+        populateCustomerBiodata(custom_id);
+    }
+            
 function populateCustomerBiodata(custom_id){
+    btn = $(".ajaxLoader");
      $.ajax({
         headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
         url: '/admin/fetch-customer-info',
         type: 'POST', data: { custom_id:custom_id },
-        // beforeSend:function(){$(".data-body").html(process);  },
-        success: function (response) {           
-           //  showpop(response);
+          beforeSend:function(){ btn.html(process+" Loading..."); },
+        success: function (response) {            
+           btn.html(""); 
+          
            $("#hmo").val(response.hmo);
            $("#enrole_no").val(response.enrole_no);
            $("#user-surname").val(response.surname);
@@ -2679,7 +2686,7 @@ function populateCustomerBiodata(custom_id){
            $("#user-nok-address").val(response.nok_address);
            $("#user-nok-occupation").val(response.nok_occupation);
            $("#user-nok-relationship").val(response.nok_relationship);
-        }, error:function(jhx,textStatus,errorThrown){ //stopLoader();
+        }, error:function(jhx,textStatus,errorThrown){  btn.html(""); 
                 console.log(""+textStatus+' - '+errorThrown);
                 checkStatus(jhx.status);
             }
@@ -2766,12 +2773,13 @@ function addConsultTasks(task="notes"){
     heading = $("#consult-header-title");
     heading.html(consult_tasks[task]);    
     var patient_id = $('input#patient').val();
+    var app_id = $('#app_id').val(); // appointment id
     var process = "<span class='fa fa-spin fa-spinner fa-3x text-dark'></span>";
    //  console.log(patient_id); exit; 
      $.ajax({
         headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
         url: '/admin/appointments/add-consultation-task/'+patient_id,
-        type: 'POST', data: { consult_type:task },
+        type: 'POST', data: { consult_type:task,app_id:app_id },
         beforeSend:function(){$(".consult-body-container").html(process);  },
         success: function (response) { 
             if(response.status==="success"){

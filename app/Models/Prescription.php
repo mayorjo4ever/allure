@@ -11,7 +11,8 @@ class Prescription extends Model
     
     protected $fillable = ['appointment_id',
         'patient_id', 'doctor_id', 'item_id', 'item_type','dosage',
-        'type_id', 'type_name', 'quantity', 'unit_price', 'total_price'
+        'type_id', 'type_name', 'quantity', 'unit_price', 'total_price',
+        'purchase_price','profit',
     ];
 
     public function item()

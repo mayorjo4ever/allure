@@ -45,6 +45,13 @@ return [
                  */
                 'relative_path' => null,
             ],
+            'database' => [
+                'dump' => [
+                    'dump_binary_path' => 'C:\\Program Files\\MySQL\\MySQL Server 9.5\\bin',
+                    'use_single_transaction' => true,
+                    'timeout' => 9000,
+                ],
+            ],
 
             /*
              * The names of the connections to the databases that should be backed up

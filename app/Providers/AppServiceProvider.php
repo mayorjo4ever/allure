@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Models\Drug;
 use App\Models\Lense;
+use App\Models\Frame;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
             'White' => Lense::class,
             'Photo AR' => Lense::class,
             'Blue Cut' => Lense::class,
+            'frame' => Frame::class
         ]);
     }
 

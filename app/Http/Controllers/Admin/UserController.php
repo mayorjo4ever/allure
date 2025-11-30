@@ -279,6 +279,15 @@ class UserController extends Controller
          }
        }
        
+       public function fetch_customer_info(Request $request) {
+         if($request->ajax()){
+             $data = $request->all(); //print "<pre>"; print_r($data); exit; 
+             $customer = User::where('id',$data['custom_id'])->first()->toArray();
+             
+             return response()->json($customer);
+         }
+       }
+       
        public function add_new_family_member(Request $request) {
             if($request->ajax()){
              $data = $request->all(); # print "<pre>"; print_r($data); exit; 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Frame;
 use App\Models\Lense;
 use App\Models\LenseCategory;
 use App\Models\LenseType;
@@ -59,6 +60,18 @@ class LenseController extends Controller
             $types = LenseType::all()->pluck('name','id')->toArray();
            ##  dd($bill_categs);
           return view('admin.lenses.lense_samples',compact('page_info','lenses','btns','categs','types'));
+    }
+    
+     public function frames() {
+          Session::put('page','frames'); Session::put('subpage','frames');
+            $page_info = ['title'=>'Our Frames ','icon'=>'fa fa-glasses','sub-title'=>'Below are samples of Frames available'];
+             $btns = [
+                 ['name'=>"Create New Frame",'action'=>"admin/add-edit-frames", 'class'=>'btn btn-success'],
+                 ];
+          
+                 $frames = Frame::all();
+           
+          return view('admin.frames.frames_samples',compact('page_info','frames','btns'));
     }
 
     public function addEditLenseCategory(Request $request, $did=null) {
@@ -204,6 +217,61 @@ class LenseController extends Controller
        $categs = LenseCategory::where('status',1)->orderBy('name')->get()->toArray();
        $types = LenseType::where('status',1)->orderBy('name')->get()->toArray();
       return view('admin.lenses.add_edit_lense_sample',compact('page_info','lense','btns','categs','types'));            
+    }
+    
+    
+    public function addEditFrames(Request $request, $id=null) {
+        Session::put('page','frames'); Session::put('subpage','add-frames');
+        if($id==''){
+           $page_info = ['title'=>'Create A New Frame','icon'=>'fa fa-glasses','sub-title'=>'Create / Edit Frame'];
+           $frame = new Frame(); $message = "New Frame Successfully Saved";
+       }
+       else { ##
+           $page_info = ['title'=>'Updating Frame Info','icon'=>'fa fa-glasses','sub-title'=>'Create / Edit Frame'];
+           $frame = Frame::findOrFail($id); $message = "Frame Successfully Updated";
+       }
+       ######## form submission
+       if($request->isMethod('post')){
+           $data = $request->all();                  
+            # print "<pre>";   print_r($data);             
+           $rules = [
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('frames')
+                        ->where(function ($query) use ($request) {
+                            return $query->where('name', $request->name);
+                        })
+                        ->ignore($frame->id), // allow updating same record
+                ],
+            ];
+            $customMessage = [
+               'name.required'=>"Please provide the frame name",
+               'name.unique'=>"This Name has already been taken",               
+                ];
+            ##$validator = Validator::make($data, $rules,$customMessage);
+            $this->validate($request, $rules, $customMessage);                        
+            $frame->name = $data['name'];
+            $frame->purchase_price = str_replace(",", "",$data['price1']);
+            $frame->sales_price = str_replace(",", "",$data['price2']);                                    
+                             
+            $cum_qty = $frame->cum_qty + $data['new_qty'];              
+            $qty_rem = $data['init_qty'] + $data['new_qty'];
+            $frame->cum_qty = $cum_qty;
+            $frame->qty_rem = $qty_rem;            
+           
+            $frame->save();
+
+            return redirect()->back()->with('success_message',$message); # redirect('admin/bill-samples')
+            //  return redirect('admin/bill-category')->with('success_message',$message);
+            // return response()->json(['type'=>'success','success_message'=>$message,'url'=>'subjects']);
+       }
+       $btns = [
+           ['name'=>"View Frames",'action'=>"admin/frames", 'class'=>'btn btn-primary']
+           ];
+      
+      return view('admin.frames.add_edit_frame_sample',compact('page_info','frame','btns'));            
     }
     
      public function upload_image(Request $request) {

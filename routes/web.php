@@ -75,11 +75,13 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         
         // Lenses -category
         Route::get('lenses','LenseController@lenses');
+        Route::get('frames','LenseController@frames');
         Route::get('lense-category','LenseController@lense_category');
         Route::get('lense-types','LenseController@lense_types');
         Route::match(['get','post'],'add-edit-lense-category/{sid?}', 'LenseController@addEditLenseCategory');
         Route::match(['get','post'],'add-edit-lense-type/{sid?}', 'LenseController@addEditLenseType');
         Route::match(['get','post'],'add-edit-lenses/{id?}', 'LenseController@addEditLenses');
+        Route::match(['get','post'],'add-edit-frames/{id?}', 'LenseController@addEditFrames');
         // upload-lense-img
         Route::post('upload-lense-image', 'LenseController@upload_image');        
               
@@ -108,6 +110,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('load-state-cities','UserController@load_state_cities');
         Route::post('filter-our-customers','UserController@filter_customers_to_display');
         Route::match(['get','post'],'family-members/{id}','UserController@family_members');
+        Route::post('fetch-customer-info','UserController@fetch_customer_info');
         Route::post('fetch-customer-family-info','UserController@fetch_customer_family_info');
         Route::post('add-new-family-member','UserController@add_new_family_member');
        
@@ -134,6 +137,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('appointments/add-consultation-task/{id}', 'ConsultationController@addConsultTasks');
         Route::post('appointments/search-for-question', 'ConsultationController@search_for_question');
         Route::post('appointments/search-for-investigations', 'ConsultationController@search_for_investigations');
+        Route::match(['get','post'],'appointments/consultationnotes', 'ConsultationController@manage_consultation_notes');
         Route::get('tests/result-computation/{param}', 'TestController@result_computation');
         Route::post('tests/investigation-result/{id}', 'TestController@storeResult');
         
@@ -257,6 +261,8 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::get('questionnaires','QuestionnaireController@questionnaires');
         Route::match(['get','post'],'add-edit-questionnaire/{id?}','QuestionnaireController@add_edit_questionnaire');
         Route::get('send-test-mail','AdminController@sendTestEmail');                      
+        
+         
        });
 });
 
