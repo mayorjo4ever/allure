@@ -151,3 +151,11 @@
     <button onclick="save_doctors_comment()" class="btn btn-outline-primary w-100 font-weight-800 ladda-button p-2 mt-2 save-doctors-comment-btn" data-style="expand-right" type="button"> Save Report </button>
 
  </x-admin.modal>
+
+<!-- make new appointment during consultation -->
+ <x-admin.modal id="next_appointment_modal" title="Schedule Next Appointment Day" size="lg">
+       <input type="hidden" value="" id="ref_no"/>
+            <div id="doctor-name" class="mb-3"></div>
+            <div id="doctor-calendar" class="mt-3"></div>
+            <div id="time-slots" class="mt-3"></div>
+ </x-admin.modal>

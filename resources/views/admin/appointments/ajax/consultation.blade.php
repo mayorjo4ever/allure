@@ -18,7 +18,7 @@
                                  <button onclick="addConsultTasks('diagnosis'),activateBtn($(this),'allSubBtn')" class="btn btn-outline-info allSubBtn w-100 p-2 m-2 font-weight-600">Add Diagnosis </button>
                             </div>                            -->
                             <div class="col-sm-12">
-                                 <button onclick="addConsultTasks('prescriptions'),activateBtn($(this),'allSubBtn')" class="btn btn-outline-info allSubBtn w-100 p-2 m-2 font-weight-600">Add Prescriptions </button>
+                                 <button onclick="addConsultTasks('prescriptions'),activateBtn($(this),'allSubBtn')" class="btn btn-outline-info allSubBtn w-100 p-2 m-2 font-weight-600">Prescribe Drugs /  Lenses / Frames </button>
                             </div>                            
                         </div>
                     

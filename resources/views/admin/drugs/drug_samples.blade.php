@@ -56,9 +56,9 @@
                 @can('modify-drugs')
                 <td>
                         @if($drug['status']==1)
-                        <a class="updateBillTypeStatus" id="bill_type_id-{{ $drug['id']}}" bill_type_id="{{ $drug['id']}}" href="javascript:void(0)" title="Active">
+                        <a class="updateDrugStatus" id="drug_id-{{ $drug['id']}}" drug_id="{{ $drug['id']}}" href="javascript:void(0)" title="Active">
                                 <i class="pe-7s-check pe-2x font-weight-bold text-success " status="active"></i> Active  </a>  
-                                @else <a class="updateBillTypeStatus" id="bill_type_id-{{ $drug['id']}}" bill_type_id="{{ $drug['id']}}" href="javascript:void(0)" title="Not Active">
+                                @else <a class="updateDrugStatus" id="drug_id-{{ $drug['id']}}" drug_id="{{ $drug['id']}}" href="javascript:void(0)" title="Not Active">
                               <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Not Active </a> 
                          @endif
                 </td>@endcan

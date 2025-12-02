@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
   #  return view('welcome');
-  return view('admin.login');
-     // return redirect('portal/login');
+  #return view('admin.login');
+  return redirect('portal/login');
 });
 
 Route::get('/dashboard', function () {
@@ -72,6 +72,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::match(['get','post'],'add-edit-drugs/{id?}','DrugController@addEditDrugSample');        
         Route::match(['get','post'],'add-edit-drug-category/{sid?}', 'DrugController@addEditDrugCategory');
         Route::match(['get','post'],'add-edit-test/{id?}', 'TestController@addEditTest');        
+        Route::post('update-drug-status', 'DrugController@updateDrugStatus');        
         
         // Lenses -category
         Route::get('lenses','LenseController@lenses');
@@ -122,6 +123,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('filter-customers-for-appointment','ConsultationController@filter_customers_to_display');
         Route::post('get-doctor-slots', 'ConsultationController@get_doctor_slots');
         Route::post('book-doctor-appointment', 'ConsultationController@book_doctor_appointment');        
+        Route::post('book-doctor-next-appointment', 'ConsultationController@book_doctor_next_appointment');        
         
         ## Appointments
         Route::match(['get','post'],'appointments', 'ConsultationController@allAppointments');                

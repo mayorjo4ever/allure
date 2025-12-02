@@ -5,7 +5,7 @@
     <ul id="searchResults" class="list-group mt-2"></ul>
 
     <form id="prescriptionForm" onsubmit="submitPrescription()" action="javascript:void(0)"> @csrf
-        <table class="table mt-3 w-100" id="prescriptionTable">
+        <table class="table table-responsive mt-3 w-100" id="prescriptionTable">
             <thead>
                 <tr>
                     <th>Item</th>
@@ -18,7 +18,7 @@
             <tbody></tbody>
         </table>
 
-        <button type="submit" class="btn btn-primary p-2 w-100">Save Prescription</button>
+        <button type="submit" class="btn btn-success p-2 w-100">Save </button>
     </form>
 
 </div>

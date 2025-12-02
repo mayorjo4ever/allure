@@ -140,7 +140,7 @@ use Carbon\Carbon;
             @include('admin.arch_widgets.summernote')
             @can('admit-patient')      
             
-            <x-admin.card header="{!! $page_info['title'] !!}  |  Appointment Date : {{$appointment->appointment_date}}">
+            <x-admin.card header="{!! $page_info['title'] !!}  ---   Appointment Date : {{Carbon::parse($appointment->appointment_date)->format('D, jS F, Y - h:i A')}}">
           
                 <div class="row">                    
                    <div class="col-md-3">

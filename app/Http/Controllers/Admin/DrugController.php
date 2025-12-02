@@ -96,12 +96,11 @@ class DrugController extends Controller
     }
     
     # updateBillTypeStatus
-        public function updateBillTypeStatus(Request $request){
-        if($request->ajax()){
-            $data = $request->all();
-            $respStatus = "1";
-            if($data['status']=="active") :  $respStatus = "0";  endif;
-            Drug::where('id',$data['bill_type_id'])->update(['status'=>$respStatus]);
+        public function updateDrugStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+             Drug::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
             return response()->json(['status'=>$respStatus]);
         }
     }

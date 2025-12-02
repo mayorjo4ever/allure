@@ -255,6 +255,7 @@ $(document).on('click','.updateMicroTreatmentStatus',function(){
                 }
         });
 });
+
 $(document).on('click','.updateBillTemplateChildStatus',function(){   
     var status = $(this).children('i').attr('status');    
     var url="/admin/update-bill-template-child-status";
@@ -263,6 +264,45 @@ $(document).on('click','.updateBillTemplateChildStatus',function(){
     var real_ref = $("#"+ref_name+"-"+real_value);
     var loader = "."+ref_name+"-"+real_value;
     var message = ['Template Sample Successfully Deleted','Template Sample Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
+
+/// 
+
+$(document).on('click','.updateDrugStatus',function(){   
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-drug-status";
+    var ref_name = "drug_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Drug Successfully Deleted','Drug Successfully Restored'];
        //  alert("."+ref_name+"_"+real_value); exit ; 
      $.ajax({
             headers:{
@@ -2494,6 +2534,129 @@ function getSlots(doctor_id, dateStr){
         });
 }
 
+
+
+function schedule_next_appointment(doctor_id,user,app_id){    
+       // $("input#doctor_id").val(doctor_id);
+        $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            },
+            type:'post',
+            url:'/admin/get-doctor-availability',
+            beforeSend:function(){ startLoader(); },
+            data:{ doctor_id:doctor_id } ,
+            success:function(response, textStatus, http){ // stopLoader();                               
+                let availability = response.availability;
+                let daysMap = { "Sun":0, "Mon":1, "Tue":2, "Wed":3, "Thu":4, "Fri":5, "Sat":6 };
+                let allowedDays = response.days.map(d => daysMap[d]);
+                $('#doctor-name').html("<span class=' h5 bg-primary text-white font-weight-bold m-1 p-2'>"+response.name+" Available Time </span>");
+                 flatpickr("#doctor-calendar", {
+                    inline: true,   
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                   // enableTime: true,
+                    disable: [
+                        function(date) {
+                            return !allowedDays.includes(date.getDay());
+                        }
+                    ],
+                    onChange: function(selectedDates, dateStr, instance) {
+                        $.ajax({
+                            headers:{
+                                  'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                                },
+                                type:'post',
+                                url: '/admin/get-doctor-slots',
+                                data: { date: dateStr , doctor_id:doctor_id },
+                                success: function(response) {
+                                    let container = $("#time-slots");
+                                    container.empty();
+                                    if (response.slots.length === 0) {
+                                        container.html("<p>No available slots</p>");
+                                        return;
+                                    }
+                                    container.append('<p class="table-success p-2 m-1 font-weight-bold">Select Convinient Time </p>'); 
+                                    response.slots.forEach(function(slot) {
+                                        let disabledClass = slot.booked ? "disabled btn-secondary" : "btn-outline-primary";
+                                        let disabledAttr = slot.booked ? "disabled" : "";
+                                        
+                                        container.append(
+                                              `<button class="btn btn-sm p-2 font-weight-bold m-1 slot-btn ${disabledClass}" 
+                                                    data-time="${slot.time}" ${disabledAttr}>
+                                               ${slot.time}
+                                            </button>`
+                                        );
+                                    });
+                                    // Slot click event
+                                    $(".slot-btn").on("click", function() {
+                                        $(".slot-btn").removeClass("active");
+                                        $(this).addClass("active");
+                                        let selectedTime = $(this).data("time");                                        
+                                        console.log("Selected slot: " + dateStr + " " + selectedTime);
+                                        /*** save the time selected  ****/
+                                        // show confirmation 
+                                         Swal.fire({
+                                            title: 'Are you sure you want to schedule this date for the next appointment?',
+                                            text: "Date : "+dateStr+" - Time:  "+selectedTime,
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, Schedule!'
+                                          }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                //
+                                                  Swal.fire({
+                                                   title: 'Scheduling Next Appointment...',
+                                                   text: 'Please wait while we complete the process.',
+                                                   allowOutsideClick: false,
+                                                   allowEscapeKey: false,
+                                                   didOpen: () => {
+                                                     Swal.showLoading();
+                                                   }
+                                                 });                                        
+                                                $.ajax({
+                                                    headers:{
+                                                      'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                                                    },
+                                                    type:'post',
+                                                    url: "/admin/book-doctor-next-appointment",                                           
+                                                    data: {                                               
+                                                        date: dateStr, user:user,app_id:app_id,
+                                                        time: selectedTime,doctor_id:doctor_id
+                                                    },
+                                                    success: function(response) {
+                                                       // showpop(response.message,response.status);
+                                                        Swal.fire({
+                                                            title: 'Successful!',
+                                                            text: response.message,
+                                                            icon: 'success',
+                                                            timer: 2000
+                                                          });
+                                                    },
+                                                    error: function(xhr) {
+                                                        showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                                                    }
+                                                });  // end ajax submit slot 
+                                                }
+                                             });
+                                        
+                                        /****************/                                        
+                                    });  // end slot btn click
+                                }// end succes - get slot 
+                            });
+
+                    }
+                });
+                    },
+            error:function(jhx,textStatus,errorThrown){ //stopLoader();
+                console.log(""+textStatus+' - '+errorThrown);
+                checkStatus(jhx.status);
+            }
+            });
+}
+
 $(document).on('click', '.appointment-confirm-btn', function (e) {
     e.preventDefault();
     let id = $(this).data('id');
@@ -2809,7 +2972,7 @@ function addConsultTasks(task="notes"){
            
            general_body.html(response.body);
            
-            calc_other_bills();
+            calc_other_bills(); startCountdown(); 
            
            
         }, error:function(jhx,textStatus,errorThrown){ //stopLoader();

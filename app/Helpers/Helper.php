@@ -2,6 +2,7 @@
 
 use App\Models\Admin;
 use App\Models\AllTreatment;
+use App\Models\Appointment;
 use App\Models\BillType;
 use App\Models\CustomerTicket;
 use App\Models\DoctorAvailability;
@@ -286,3 +287,6 @@ function get_new_outsider_id(){
         return $bill_info;               
     }
     
+    function appointment_details($id){
+        return Appointment::find($id);
+    }

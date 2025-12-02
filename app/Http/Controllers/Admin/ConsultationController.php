@@ -116,6 +116,7 @@ class ConsultationController extends Controller
                     $isBooked = Appointment::where('doctor_id', $doctorId)
                         ->whereDate('appointment_date', $date)
                         ->whereTime('appointment_date', $time)
+                        ->where('status', '!=', 'canceled')
                         ->exists();
                     $slots[] = [
                         'time' => $time,
@@ -139,6 +140,7 @@ class ConsultationController extends Controller
         // Check if already booked
         $exists = Appointment::where('doctor_id', $request->doctor_id)
             ->where('appointment_date', $appointmentDateTime)
+            ->where('status', '!=', 'canceled')
             ->exists();
 
         if ($exists) {
@@ -160,9 +162,50 @@ class ConsultationController extends Controller
             'message' => 'Appointment booked successfully!',
             'appointment' => $appointment
         ]);
-         endif; 
-         
+         endif;          
     }
+    ## booking another appointment 
+     public function book_doctor_next_appointment(Request $request){
+        if($request->ajax()):
+        # print "<pre>"; print_r($request->all()); 
+          $validated = $request->validate([
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+          ]);
+        $appointmentDateTime = Carbon::parse($validated['date'].' '.$validated['time']);
+
+        // Check if already booked
+        $exists = Appointment::where('doctor_id', $request->doctor_id)
+            ->where('appointment_date', $appointmentDateTime)
+            ->where('status', '!=', 'canceled')
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This slot is already booked. Please choose another.'
+            ], 200);
+        }
+                  
+        $newAppointment = Appointment::create([
+            'doctor_id' => $request->doctor_id,
+            'user_id'   => $request->user,    #  auth()->id(), // logged in patient
+            'appointment_date' => $appointmentDateTime,
+            'status' => 'pending',
+        ]);         
+        
+        $oldAppointment = Appointment::find($request->app_id);
+        $oldAppointment->next_appointment_id = $newAppointment->id;
+        $oldAppointment->save(); 
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Appointment booked successfully!',
+            'appointment' => $newAppointment
+        ]);
+         endif;          
+    }
+    
     ### view all appointments 
     public function allAppointments(Request $request){
         Session::put('page','services'); Session::put('subpage','all_apps');        
@@ -411,6 +454,9 @@ class ConsultationController extends Controller
                  ->findOrFail($data['app_id']);
          $billings = BillType::where('status',1)->get();
          $default_note = ConsultationNote::first();
+         
+        # print "<pre>"; print_r($appointment->toarray()); die; 
+         
          return response()->json([
             'status'=>'success',
              'body'=>(String)View::make('admin.appointments.ajax.notes_body',compact('appointment','default_note')),
@@ -551,6 +597,7 @@ class ConsultationController extends Controller
         }
         // Search drugs
           $drugs = Drug::where('name', 'like', "%{$query}%")
+            ->where('status',1)
             ->select('id', 'name', 'sales_price', 'qty_rem')
             ->get()
             ->map(function ($drug) {
@@ -559,6 +606,7 @@ class ConsultationController extends Controller
             }); 
         // Search lenses
           $lenses = Lense::where('name', 'like', "%{$query}%")
+            ->where('status',1)   
             ->select('id', 'name', 'type_id', 'sales_price', 'qty_rem')
             ->get()
             ->map(function ($lens) {
@@ -566,6 +614,7 @@ class ConsultationController extends Controller
                 return $lens;
             });
             $frames = Frame::where('name', 'like', "%{$query}%")
+            ->where('status',1)
             ->select('id', 'name', 'sales_price', 'qty_rem')
             ->get()
             ->map(function ($frame) {

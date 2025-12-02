@@ -4,9 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/xampp/htdocs/allure/public/template/dist/js/custom.js</file>
-            <file>file:/E:/xampp/htdocs/allure/resources/views/admin/tickets/payment/customer_paym_search_output_ajax.blade.php</file>
-            <file>file:/E:/xampp/htdocs/allure/app/Http/Controllers/Admin/PaymentController.php</file>
-            <file>file:/E:/xampp/htdocs/allure/resources/views/admin/tickets/receipt/body.blade.php</file>
+            <file>file:/E:/xampp/htdocs/allure/routes/web.php</file>
+            <file>file:/E:/xampp/htdocs/allure/app/Http/Controllers/Admin/ConsultationController.php</file>
+            <file>file:/E:/xampp/htdocs/allure/resources/views/admin/drugs/drug_samples.blade.php</file>
+            <file>file:/E:/xampp/htdocs/allure/resources/views/admin/appointments/ajax/consultation_summary.blade.php</file>
+            <file>file:/E:/xampp/htdocs/allure/app/Http/Controllers/Admin/DrugController.php</file>
         </group>
     </open-files>
 </project-private>

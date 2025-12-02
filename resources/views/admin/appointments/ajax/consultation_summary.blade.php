@@ -109,6 +109,33 @@
 
 <div class="row mt-5">
     <div class="col-md-12">
+        <h4 class="card-title bg-light p-2">Next Appointment Date </h4>  
+        <strong><i> Your Next Appointment Date is : 
+                @if($appointment->next_appointment_id == "")
+                <span class="text-danger"> --:--</span> 
+                <button onclick="schedule_next_appointment('{{$appointment->doctor_id}}','{{$appointment->user_id}}','{{$appointment->id}}')"  data-toggle="modal" data-target="#next_appointment_modal"  class="btn btn-info btn-lg "> Set Up Next Appointment </button>
+                @else 
+                <?php
+             $nx_appointment = appointment_details($appointment->next_appointment_id); 
+                         ?>
+                <span class="font-weight-500">{{ $nx_appointment->human_date }} </span>
+                        <br/>   {{ $nx_appointment->appointment_date->format('Y-m-d') }}  &nbsp; 
+                            {{ $nx_appointment->appointment_date->format('H:i A') }}
+                          <br/>
+                          <span class="countdown font-weight-500" style="font-size: 1rem"
+                                data-time="{{ $nx_appointment->appointment_date->format('Y-m-d H:i:s') }}">
+                       </span>
+                @endif
+                </i> </strong>
+         
+           
+        
+    </div>
+</div>
+
+
+<div class="row mt-5">
+    <div class="col-md-12">
         <h4 class="card-title bg-light p-2">FINAL SUBMISSION </h4>  
         <p><strong>Include any other fees and submit / close the appointment </strong></p>
        @php
