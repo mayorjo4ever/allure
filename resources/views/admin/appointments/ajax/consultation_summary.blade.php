@@ -50,12 +50,13 @@
           @foreach($appointment->investigations as $investigation)
           <div class="col-md-12 mb-3 mt-3">
               <p>
-                {{$i}} - {{investigation_name($investigation->investigation_template_id) }}
+                {{$i}} - {{$inv_name = investigation_name($investigation->investigation_template_id) }}
                 &nbsp; <i>(&#8358; {{number_format($investigation->price)}}) </i>
                 @php $invest_fee += $investigation->price; @endphp
                 &nbsp; &nbsp; &nbsp; <button onclick="load_investigation_result('{{$investigation->id}}')"  data-toggle="modal" data-target="#view-investigation-result"  class="btn btn-sm @if(!empty($investigation->results->toarray())) btn-outline-success @else btn-outline-warning @endif "> View Result </button>
-                &nbsp; &nbsp; &nbsp; <button onclick="deleteConsultationTest('{{}}')" class="btn btn-outline-danger" title="Delete  {{investigation_name($investigation->investigation_template_id) }}">Delete </button>
-              </p>                         
+                &nbsp; &nbsp; &nbsp; <button onclick="deleteConsultationTest('{{$investigation->id."|".$inv_name}}')" class="btn btn-outline-danger" title="Delete  {{investigation_name($investigation->investigation_template_id) }}">Delete </button>
+              </p>  
+              <!-- <pre><?php # print_r($investigation->toarray())?></pre>-->
           </div>
           <?php $i++; ?>
           @endforeach
@@ -72,7 +73,7 @@
         <h4 class="card-title bg-light p-2">Prescriptions </h4>  
          @php $drug_fee = 0; @endphp
          @if(!empty($appointment->prescriptions->toArray()))  <?php $i = 1; ?>
-         <strong><i> Summary List of Prescribed Drugs, Lenses and Usage </i></strong>
+         <strong><i> Summary List of Prescribed Drugs, Lenses and Frames </i></strong>
          <table class="table table-sm">
              <tr>
                  <th>SN</th>
@@ -82,17 +83,20 @@
                  <th>UNIT PRICE</th>
                  <th>TOTAL PRICE</th>
                  <th>DOSAGE</th>
+                 <th>ACTION</th>
              </tr> 
          @foreach($appointment->prescriptions as $prescription)
            <tr>
                  <td> {{$i}}</td>
-                 <td>{{$prescription->item->name  }}</td>
-                 <td> {{ucwords($prescription->item_type)}} </td>
+                 <td>{{$psc_name = $prescription->item->name  }}</td>
+                 <td> {{$psc_type = ucwords($prescription->item_type)}} </td>
                  <td> {{ $prescription->quantity }} </td>
                  <td>&#8358; {{ number_format($prescription->unit_price) }}</td>
                  <td><strong>&#8358; {{number_format($prescription->total_price)}} </strong> </td>                 
                  <td>{{$prescription->dosage  }}</td>
+                 <td><button type="button" onclick="deleteConsultationPrescriptions('{{$prescription->id."|".$psc_name."|".$psc_type}}')" class="btn btn-outline-danger"> Delete </button></td>
                  @php $drug_fee += $prescription->total_price; @endphp
+                  <!--<pre><?php # print_r($prescription->toarray())?></pre>-->
            </tr>                  
           <?php $i++; ?>
           @endforeach

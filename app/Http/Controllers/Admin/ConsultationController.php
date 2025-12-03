@@ -745,5 +745,32 @@ class ConsultationController extends Controller
 
         return "{$prefix}{$datePart}{$random}";
     }               
+    
+    // deleting investigations 
+    function delete_patient_investigation(Request $request){
+        if($request->ajax()):
+            $params = explode("|",$request->params);  # id | name            
+            PatientInvestigation::where('id',$params[0])
+                    ->delete();             
+            return response()->json([
+                'status'=>'success',
+                'message'=>$params[1]." Successfully Deleted "
+            ]);         
+        endif; 
+    }
+    
+    // deleting prescription 
+    function delete_patient_prescription(Request $request){
+        if($request->ajax()):
+            $params = explode("|",$request->params);  # id | name  | type          
+            Prescription::where('id',$params[0])
+                    ->delete();             
+            return response()->json([
+                'status'=>'success',
+                'message'=>$params[1]." (".$params[2].") Successfully Deleted "
+            ]);         
+        endif; 
+    }
+    
 }
  

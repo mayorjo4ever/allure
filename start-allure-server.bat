@@ -27,7 +27,7 @@ echo.
 start http://%local_ip%:%port%
 
 :: Change directory to your Laravel project
-cd /d "D:\xampp8\htdocs\allure"
+cd /d "c:\xampp\htdocs\allure"
 
 :: Start Laravel server
 :: php artisan optimize

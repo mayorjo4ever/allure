@@ -56,10 +56,10 @@
                 @can('modify-tests')
                 <td>
                         @if($test['status']==1)
-                        <a class="updateBillTypeStatus" id="bill_type_id-{{ $test['id']}}" bill_type_id="{{ $test['id']}}" href="javascript:void(0)" title="Active">
+                        <a class="updateTestStatus" id="test_id-{{ $test['id']}}" test_id="{{ $test['id']}}" href="javascript:void(0)" title="Active">
                                 <i class="pe-7s-check pe-2x font-weight-bold text-success " status="active"></i> Active  </a>  
-                                @else <a class="updateBillTypeStatus" id="bill_type_id-{{ $test['id']}}" bill_type_id="{{ $test['id']}}" href="javascript:void(0)" title="Not Active">
-                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Not Active </a> 
+                                @else <a class="updateTestStatus" id="test_id-{{ $test['id']}}" test_id="{{ $test['id']}}" href="javascript:void(0)" title="Deleted">
+                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Deleted </a> 
                          @endif
                 </td>@endcan
                @can('edit-tests') <td >

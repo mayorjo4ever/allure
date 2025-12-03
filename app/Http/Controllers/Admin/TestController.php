@@ -287,6 +287,17 @@ class TestController extends Controller
                 'Investigation results saved successfully.');
                    
             }
+            
+     public function updateTestStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+                InvestigationTemplate::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
+            
+            
      }
       
 

@@ -74,6 +74,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::match(['get','post'],'add-edit-test/{id?}', 'TestController@addEditTest');        
         Route::post('update-drug-status', 'DrugController@updateDrugStatus');        
         Route::post('update-drug-categ-status', 'DrugController@updateDrugCategStatus');        
+        Route::post('update-test-status', 'TestController@updateTestStatus');        
         
         // Lenses -category
         Route::get('lenses','LenseController@lenses');
@@ -162,7 +163,11 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('appointments/{app_id}/finalize', 'ConsultationController@finalize2Appointment');        
         
         Route::get('/appointments/pending-investigations','TestController@pending_investigations');
- 
+        Route::post('delete-patient-investigation','ConsultationController@delete_patient_investigation');
+        Route::post('delete-patient-prescription','ConsultationController@delete_patient_prescription');
+       
+        
+        
         ## VIEW AND PROCESS ALL INVESTIGATIONS 
         
         /** manage tickets 

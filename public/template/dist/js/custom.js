@@ -303,6 +303,42 @@ $(document).on('click','.updateBillTemplateChildStatus',function(){
 
 /// 
 
+$(document).on('click','.updateTestStatus',function(){   
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-test-status";
+    var ref_name = "test_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Test Successfully Deleted','Test Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
 $(document).on('click','.updateDrugStatus',function(){   
     var status = $(this).children('i').attr('status');    
     var url="/admin/update-drug-status";
@@ -484,55 +520,7 @@ $(document).on('click','.updateFrameStatus',function(){
         });
 });
 
-    function deleteConsultationTest(){
-          // show confirmation 
-        Swal.fire({
-           title: 'Delete This Test?',
-           text: "Date : "+dateStr+" - Time:  "+selectedTime,
-           icon: 'question',
-           showCancelButton: true,
-           confirmButtonColor: '#3085d6',
-           cancelButtonColor: '#d33',
-           confirmButtonText: 'Yes, Schedule!'
-         }).then((result) => {
-           if (result.isConfirmed) {
-               //
-                 Swal.fire({
-                  title: 'Scheduling Next Appointment...',
-                  text: 'Please wait while we complete the process.',
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  didOpen: () => {
-                    Swal.showLoading();
-                  }
-                });                                        
-               $.ajax({
-                   headers:{
-                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-                   },
-                   type:'post',
-                   url: "/admin/book-doctor-next-appointment",                                           
-                   data: {                                               
-                       date: dateStr, user:user,app_id:app_id,
-                       time: selectedTime,doctor_id:doctor_id
-                   },
-                   success: function(response) {
-                      // showpop(response.message,response.status);
-                       Swal.fire({
-                           title: 'Successful!',
-                           text: response.message,
-                           icon: 'success',
-                           timer: 2000
-                         });
-                   },
-                   error: function(xhr) {
-                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
-                   }
-               });  // end ajax submit slot 
-               }
-            });
-
-    }
+   
 
 // Perission Filter
 $(document).on('click','.role-perm-btn',function(){
@@ -3545,40 +3533,110 @@ function addConsultTasks(task="notes"){
             });
           }
         });
-
-        
-        
-    /**
-      Swal.fire(
-        'Bills are ' + bills.join(', ') + ' with total of ' + extraAmount,
-        'Final Fees = ' + final_fees, 
-        'success',
-      );
-
-     // Safely encode bills and amount
-      let billsParam = bills.length >0 ? encodeURIComponent(bills.join(',')) : 'null';
-      let redirectUrl = `/admin/appointments/${app_id}/finalize/${billsParam}/${final_fees}`;
-
-
-      // wait a bit then redirect
-      setTimeout(() => {
-        window.location.href = redirectUrl;
-      }, 1500); **/
+ 
     }
   });
 }
-//
-//function add_summernote(){ 
-//   
-//	ClassicEditor
-//		.create( document.querySelector( '#complaint_forms' ), {
-//			// toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-//		} )
-//		.then( editor => {
-//			window.editor = editor;
-//		} )
-//		.catch( err => {
-//			console.error( err.stack );
-//		} );  
-//     
-//} 
+
+ function deleteConsultationTest(params){
+       info = params.split('|');  /// investigation-id | name       
+        var patient_id = $('input#patient').val();
+        var app_id = $('#app_id').val(); // appointment id
+        Swal.fire({
+           title: 'Delete This Investigation?',
+           text: info[1],
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes, Delete!'
+         }).then((result) => {
+           if (result.isConfirmed) {
+               //
+                 Swal.fire({
+                  title: 'Deleting Investigation...',
+                  text: 'Please wait while we complete the process.',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  }
+                });                                        
+               $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/delete-patient-investigation",                                           
+                   data: {                                               
+                       params : params
+                   },
+                   success: function(response) {
+                      display_consultation_summary(app_id,patient_id);
+                      Swal.fire({
+                           title: 'Successful!',
+                           text: response.message,
+                           icon: 'success',
+                           timer: 2000
+                         });
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+               }
+            });
+
+    }
+    
+    
+ function deleteConsultationPrescriptions(params){
+       info = params.split('|');  /// prescriptions-id | name | type      
+        var patient_id = $('input#patient').val();
+        var app_id = $('#app_id').val(); // appointment id
+        Swal.fire({
+           title: 'Delete This '+info[2],
+           text: info[1],
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes, Delete!'
+         }).then((result) => {
+           if (result.isConfirmed) {
+               //
+                 Swal.fire({
+                  title: 'Deleting Items...',
+                  text: 'Please wait while we complete the process.',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  }
+                });                                        
+               $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/delete-patient-prescription",                                           
+                   data: {                                               
+                       params : params
+                   },
+                   success: function(response) {
+                      display_consultation_summary(app_id,patient_id);
+                      Swal.fire({
+                           title: 'Successful!',
+                           text: response.message,
+                           icon: 'success',
+                           timer: 2000
+                         });
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+               }
+            });
+
+    }
