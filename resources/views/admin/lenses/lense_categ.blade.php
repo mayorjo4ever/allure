@@ -32,14 +32,14 @@
                 @can('modify-lenses-category')
                 <td>
                          @if($categ['status']==1)
-                            <a class="updateBillCategStatus" id="bill_categ_id-{{ $categ['id']}}" bill_categ_id="{{ $categ['id']}}" href="javascript:void(0)">
+                            <a class="updateLenseCategStatus" id="lense_categ_id-{{ $categ['id']}}" lense_categ_id="{{ $categ['id']}}" href="javascript:void(0)">
                                 <i class="pe-7s-check pe-2x font-weight-bold text-success " status="active"></i> Active </a>
-                           @else <a class="updateBillCategStatus" id="bill_categ_id-{{ $categ['id']}}" bill_categ_id="{{ $categ['id']}}" href="javascript:void(0)">
-                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Not Active </a>
+                           @else <a class="updateLenseCategStatus" id="lense_categ_id-{{ $categ['id']}}" lense_categ_id="{{ $categ['id']}}" href="javascript:void(0)">
+                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Deleted </a>
                           @endif
                 </td>@endcan
                       @can('edit-lenses-category') <td >
-                        <a class="" bill_categ_id="{{ $categ['id']}}" href="{{url('admin/add-edit-lense-category/'.$categ['id']) }}">
+                        <a class="" lense_categ_id="{{ $categ['id']}}" href="{{url('admin/add-edit-lense-category/'.$categ['id']) }}">
                             <i class="pe-7s-pen pe-2x text-danger" status="active"></i> </a>                        
 
                 </td> @endcan

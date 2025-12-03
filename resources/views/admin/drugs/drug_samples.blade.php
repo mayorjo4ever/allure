@@ -58,8 +58,8 @@
                         @if($drug['status']==1)
                         <a class="updateDrugStatus" id="drug_id-{{ $drug['id']}}" drug_id="{{ $drug['id']}}" href="javascript:void(0)" title="Active">
                                 <i class="pe-7s-check pe-2x font-weight-bold text-success " status="active"></i> Active  </a>  
-                                @else <a class="updateDrugStatus" id="drug_id-{{ $drug['id']}}" drug_id="{{ $drug['id']}}" href="javascript:void(0)" title="Not Active">
-                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Not Active </a> 
+                                @else <a class="updateDrugStatus" id="drug_id-{{ $drug['id']}}" drug_id="{{ $drug['id']}}" href="javascript:void(0)" title="Deleted">
+                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Deleted </a> 
                          @endif
                 </td>@endcan
                @can('edit-drugs') <td >

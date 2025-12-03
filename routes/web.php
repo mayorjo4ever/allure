@@ -73,6 +73,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::match(['get','post'],'add-edit-drug-category/{sid?}', 'DrugController@addEditDrugCategory');
         Route::match(['get','post'],'add-edit-test/{id?}', 'TestController@addEditTest');        
         Route::post('update-drug-status', 'DrugController@updateDrugStatus');        
+        Route::post('update-drug-categ-status', 'DrugController@updateDrugCategStatus');        
         
         // Lenses -category
         Route::get('lenses','LenseController@lenses');
@@ -85,7 +86,11 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::match(['get','post'],'add-edit-frames/{id?}', 'LenseController@addEditFrames');
         // upload-lense-img
         Route::post('upload-lense-image', 'LenseController@upload_image');        
-              
+        Route::post('update-lense-status', 'LenseController@updateLenseStatus');                
+        Route::post('update-lense-categ-status', 'LenseController@updateLenseCategStatus');        
+        Route::post('update-lense-type-status', 'LenseController@updateLenseTypeStatus');        
+        Route::post('update-frame-status', 'LenseController@updateFrameStatus');
+        
         #  update-bill-categ-status
         Route::post('update-bill-categ-status', 'BillingController@updateCategStatus');        
         Route::post('update-bill-type-status', 'BillingController@updateBillTypeStatus');

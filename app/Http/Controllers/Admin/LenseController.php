@@ -304,4 +304,38 @@ class LenseController extends Controller
        endif; ## end ajax            
     }
     
+      public function updateLenseStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+             Lense::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
+    
+      public function updateLenseCategStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+               LenseCategory::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
+     
+    public function updateLenseTypeStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+                LenseType::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
+    public function updateFrameStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+                Frame::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
 }

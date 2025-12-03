@@ -132,31 +132,39 @@ $(document).on('click','.updateAdminStatus',function(){
 });
 
 
-$(document).on('click','.updateBillCategStatus',function(){
-    var status = $(this).children('i').attr('status');
-    var categ_id = $(this).attr('bill_categ_id');
-    var message= ['Bill Category Successfully Deleted','Bill Category Successfully Restored'];
+$(document).on('click','.updateDrugCategStatus',function(){
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-drug-categ-status";
+    var ref_name = "drug_categ_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Drug Category Successfully Deleted','Drug Category Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
      $.ajax({
             headers:{
-              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
             },
             type:'post',
-            url:'/admin/update-bill-categ-status',
-            data:{status:status,categ_id:categ_id},
-            success:function(resp, textStatus, http){ // alert(resp);
-                 if(resp['status'] == "0") {
-                    $("#bill_categ_id-"+categ_id).html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>");
-                    $("#bill_categ_id-"+categ_id).closest('tr').removeClass('active');
-                    $("#bill_categ_id-"+categ_id).closest('tr').addClass('inactive');
-                 }
-                 else if(resp['status'] == "1") { $("#bill_categ_id-"+categ_id).html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i>");
-                    $("#bill_categ_id-"+categ_id).closest('tr').removeClass('inactive');
-                    $("#bill_categ_id-"+categ_id).closest('tr').addClass('active');
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
                 }
-                showpop(message[resp['status']],'success');  hideInactiveTables();
-            },
-            error:function(jhx,textStatus,errorThrown){
-                checkStatus(jhx.status); }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
         });
 });
 
@@ -331,6 +339,200 @@ $(document).on('click','.updateDrugStatus',function(){
         });
 });
 
+$(document).on('click','.updateLenseStatus',function(){   
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-lense-status";
+    var ref_name = "lense_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Lense Successfully Deleted','Lense Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
+
+$(document).on('click','.updateLenseCategStatus',function(){
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-lense-categ-status";
+    var ref_name = "lense_categ_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Lense Category Successfully Deleted','Lense Category Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
+$(document).on('click','.updateLenseTypeStatus',function(){
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-lense-type-status";
+    var ref_name = "lense_type_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Lense Type Successfully Deleted','Lense Type Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
+$(document).on('click','.updateFrameStatus',function(){
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-frame-status";
+    var ref_name = "frame_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Frame Successfully Deleted','Frame Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
+    function deleteConsultationTest(){
+          // show confirmation 
+        Swal.fire({
+           title: 'Delete This Test?',
+           text: "Date : "+dateStr+" - Time:  "+selectedTime,
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes, Schedule!'
+         }).then((result) => {
+           if (result.isConfirmed) {
+               //
+                 Swal.fire({
+                  title: 'Scheduling Next Appointment...',
+                  text: 'Please wait while we complete the process.',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  }
+                });                                        
+               $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/book-doctor-next-appointment",                                           
+                   data: {                                               
+                       date: dateStr, user:user,app_id:app_id,
+                       time: selectedTime,doctor_id:doctor_id
+                   },
+                   success: function(response) {
+                      // showpop(response.message,response.status);
+                       Swal.fire({
+                           title: 'Successful!',
+                           text: response.message,
+                           icon: 'success',
+                           timer: 2000
+                         });
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+               }
+            });
+
+    }
 
 // Perission Filter
 $(document).on('click','.role-perm-btn',function(){

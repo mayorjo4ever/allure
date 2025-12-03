@@ -31,15 +31,15 @@
                 <td> {{ $type['name']}} </td>                
                 @can('modify-lenses-types')
                 <td>
-                         @if($type['status']==1)
-                            <a class="updateBillCategStatus" id="bill_categ_id-{{ $type['id']}}" bill_categ_id="{{ $type['id']}}" href="javascript:void(0)">
+                     @if($type['status']==1)
+                            <a class="updateLenseTypeStatus" id="lense_type_id-{{ $type['id']}}" lense_type_id="{{ $type['id']}}" href="javascript:void(0)">
                                 <i class="pe-7s-check pe-2x font-weight-bold text-success " status="active"></i> Active </a>
-                           @else <a class="updateBillCategStatus" id="bill_categ_id-{{ $type['id']}}" bill_categ_id="{{ $type['id']}}" href="javascript:void(0)">
-                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Not Active </a>
+                           @else <a class="updateLenseTypeStatus" id="lense_type_id-{{ $type['id']}}" lense_type_id="{{ $type['id']}}" href="javascript:void(0)">
+                              <i class="pe-7s-attention pe-2x  text-danger font-weight-bold"  status="inactive"></i> Deleted </a>
                           @endif
                 </td>@endcan
                       @can('edit-lenses-types') <td >
-                        <a class="" bill_categ_id="{{ $type['id']}}" href="{{url('admin/add-edit-lense-type/'.$type['id']) }}">
+                        <a class="" lense_type_id="{{ $type['id']}}" href="{{url('admin/add-edit-lense-type/'.$type['id']) }}">
                             <i class="pe-7s-pen pe-2x text-danger" status="active"></i> </a>                        
 
                 </td> @endcan

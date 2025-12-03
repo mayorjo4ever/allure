@@ -40,7 +40,7 @@ class DrugController extends Controller
             else {
                  $drugs = Drug::all()->toArray();
             }
-            $drugs_categs = DrugCategory::all()->pluck('name','id')->toArray();
+            $drugs_categs = DrugCategory::where('status',1)->pluck('name','id')->toArray();
            ##  dd($bill_categs);
           return view('admin.drugs.drug_samples',compact('page_info','drugs','btns','drugs_categs'));
     }
@@ -95,7 +95,7 @@ class DrugController extends Controller
         }
     }
     
-    # updateBillTypeStatus
+    # updateDrugStatus
         public function updateDrugStatus(Request $request){
           if($request->ajax()){
             $data = $request->all(); $respStatus = "1";            
@@ -104,7 +104,14 @@ class DrugController extends Controller
             return response()->json(['status'=>$respStatus]);
         }
     }
-    
+         public function updateDrugCategStatus(Request $request){
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            if($data['status']=="active") :  $respStatus = "0";  endif;            
+                DrugCategory::where('id',$data['data_id'])->update(['status'=>$respStatus]);            
+            return response()->json(['status'=>$respStatus]);
+        }
+    }
     
 
     public function addEditDrugSample(Request $request, $bid=null) {

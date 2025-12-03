@@ -50,10 +50,11 @@
           @foreach($appointment->investigations as $investigation)
           <div class="col-md-12 mb-3 mt-3">
               <p>
-                {{$i}} -   {{investigation_name($investigation->investigation_template_id) }}
+                {{$i}} - {{investigation_name($investigation->investigation_template_id) }}
                 &nbsp; <i>(&#8358; {{number_format($investigation->price)}}) </i>
                 @php $invest_fee += $investigation->price; @endphp
                 &nbsp; &nbsp; &nbsp; <button onclick="load_investigation_result('{{$investigation->id}}')"  data-toggle="modal" data-target="#view-investigation-result"  class="btn btn-sm @if(!empty($investigation->results->toarray())) btn-outline-success @else btn-outline-warning @endif "> View Result </button>
+                &nbsp; &nbsp; &nbsp; <button onclick="deleteConsultationTest('{{}}')" class="btn btn-outline-danger" title="Delete  {{investigation_name($investigation->investigation_template_id) }}">Delete </button>
               </p>                         
           </div>
           <?php $i++; ?>
