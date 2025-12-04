@@ -153,6 +153,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('appointments/save-doctors-comment/{patient_id}/{app_id}','ConsultationController@save_doctors_comment');
         Route::post('appointments/save-doctors-question/{patient_id}/{app_id}','ConsultationController@save_doctors_question');
         Route::post('appointments/display-consultation-summary','ConsultationController@display_consultation_summary');
+        Route::post('appointments/display-dummy-consultation-summary','ConsultationController@display_dummy_consultation_summary');
         Route::post('appointments/add-patient-investigation/{patient_id}/{app_id}','ConsultationController@add_patient_investigation');
         Route::post('load-investigation-result','ConsultationController@load_investigation_result');
         Route::post('appointments/search-for-bills','ConsultationController@bill_search');

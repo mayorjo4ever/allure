@@ -1968,14 +1968,14 @@ function save_param_specimen_result() {
         }
     }
     
-    function add_tinymce(){
+    function add_tinymce(elem='complaint_forms'){
         
         if(window.editor){
             window.editor.destroy();
         }
 
         ClassicEditor
-        .create(document.querySelector('#complaint_forms'), {
+        .create(document.querySelector('#'+elem), {
             toolbar: {
                 items: [
                     'undo', 'redo', '|',
@@ -2017,8 +2017,6 @@ function save_param_specimen_result() {
         .catch(err => {
             console.error(err.stack);
         });
-
-
     
     }
 
@@ -3161,6 +3159,34 @@ function addConsultTasks(task="notes"){
            var btn = $('.allSubBtn.active').click();
            
            general_body.html(response.body);
+           
+            calc_other_bills(); startCountdown(); 
+           
+           
+        }, error:function(jhx,textStatus,errorThrown){ //stopLoader();
+                console.log(""+textStatus+' - '+errorThrown);
+                checkStatus(jhx.status);
+            }
+    });    
+}
+
+ function display_this_consultation(app_id,patient_id){
+     elem = $(".past_consultation_summary");        
+     // general_body = $(".consult-body-container");
+     $.ajax({
+        headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
+        url: '/admin/appointments/display-dummy-consultation-summary',
+        type: 'POST', data: { app_id:app_id,patient_id:patient_id },
+        beforeSend:function(){ elem.html(process);  },
+        success: function (response) {           
+           //  showpop(response);
+           elem.html(response.body);
+           elem.append(response.view);
+           add_tinymce('dummy_notes');
+          //  var btn = $('.allSubBtn.active').click();
+           
+           // general_body.html(response.body);
+           // elem.html(response.body);
            
             calc_other_bills(); startCountdown(); 
            

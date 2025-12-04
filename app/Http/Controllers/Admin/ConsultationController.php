@@ -355,7 +355,24 @@ class ConsultationController extends Controller
                 
                 
             elseif($info_type === "appointments"):
-            
+                // print_r($request->all()); die; print $info_type; 
+                /* print_r($request->all()) = (
+                        [info_type] => appointments
+                        [app_id] => 1
+                    )
+                 */#   print "<pre>"; 
+                $current_appointments = Appointment::findOrFail($request->app_id); 
+               ## print_r($current_appointments->toarray());
+                $past_appointments = Appointment::where('user_id',$current_appointments->user_id)
+                        ->whereIn('status',['completed','checked_out']) 
+                        ->whereNot('id',$request->app_id)
+                        ->get();
+                // print_r($past_appointments->toarray());
+                
+                return response()->json([
+                'status'=>'success',
+                'view'=>(String)View::make('admin.appointments.ajax.previous_consultation',compact('past_appointments'))]); 
+                
         endif;
     }
     
@@ -461,6 +478,23 @@ class ConsultationController extends Controller
             'status'=>'success',
              'body'=>(String)View::make('admin.appointments.ajax.notes_body',compact('appointment','default_note')),
              'view'=>(String)View::make('admin.appointments.ajax.consultation_summary',compact('appointment','billings'))
+             ]);             
+        }
+  
+    public function display_dummy_consultation_summary(Request $request) {
+         $data = $request->all(); 
+         $appointment = Appointment::with(['consultation','questions',
+             'investigations.results','prescriptions.item','bills'])
+                 ->findOrFail($data['app_id']);
+         $billings = BillType::where('status',1)->get();
+         $default_note = ConsultationNote::first();
+         
+        # print "<pre>"; print_r($appointment->toarray()); die; 
+         
+         return response()->json([
+            'status'=>'success',
+             'body'=>(String)View::make('admin.appointments.ajax.dummy_notes_body',compact('appointment','default_note')),
+             'view'=>(String)View::make('admin.appointments.ajax.dummy_consultation_summary',compact('appointment','billings'))
              ]);             
         }
     
