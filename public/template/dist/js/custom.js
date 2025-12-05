@@ -520,6 +520,42 @@ $(document).on('click','.updateFrameStatus',function(){
         });
 });
 
+$(document).on('click','.updateBankAccountStatus',function(){
+    var status = $(this).children('i').attr('status');    
+    var url="/admin/update-bank-account-status";
+    var ref_name = "account_id";
+    var real_value = $(this).attr(ref_name);
+    var real_ref = $("#"+ref_name+"-"+real_value);
+    var loader = "."+ref_name+"-"+real_value;
+    var message = ['Account Successfully Deleted','Account Successfully Restored'];
+       //  alert("."+ref_name+"_"+real_value); exit ; 
+     $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')  
+            },
+            type:'post',
+            url:url, beforeSend:function(){startLoader(loader,true);},
+            data:{status:status,data_id:real_value},
+            success:function(resp){ // alert(resp);
+                 if(resp['status'] == "0") { 
+                     real_ref.html("<i class='pe-7s-attention pe-2x font-weight-bold  text-danger' status='inactive'></i>  Deleted ");
+                     real_ref.closest('tr').removeClass('active');
+                     real_ref.closest('tr').addClass('inactive'); 
+                }
+                 else if(resp['status'] == "1") { 
+                     real_ref.html("<i class='pe-7s-check pe-2x font-weight-bold  text-success' status='active'></i> Active");
+                     real_ref.closest('tr').removeClass('inactive');
+                     real_ref.closest('tr').addClass('active');  
+                }
+                stopLoader(loader,true);
+               showpop(message[resp['status']],'success');  hideInactiveTables();
+            }, 
+		error:function(jhx,textStatus,errorThrown){  
+                checkStatus(jhx.status); 
+                }
+        });
+});
+
    
 
 // Perission Filter

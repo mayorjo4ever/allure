@@ -15,10 +15,10 @@
                     <!--<th>balance</th>
                     <th>refund</th>-->
                 </tr>
-                @php $total_bill = 0; $allcash = 0; $allpos = 0; $alltransfer = 0;  @endphp
+                @php $total_bill = 0; $allcash = 0; $allpos = 0; $alltransfer = 0; $sn = 0;  @endphp
                 @foreach($payments as $k=>$payment)
                 <tr class="text-capitalize">
-                    @php 
+                    @php   $sn++; 
                         $cashes = extract_amount($payment,'cash'); 
                         $pos = extract_amount($payment,'pos');
                         $transfers = extract_amount($payment,'transfer'); 
@@ -29,14 +29,14 @@
                         $each_pay = $cash_sum + $pos_sum + $transfer_sum; 
                         
                     @endphp
-                    <td>{{$k}}</td>
+                    <td>{{$sn}}</td>
                     <td>{{$payment[0]['ticketno']}} </td>
                     <td>{{users_name($payment[0]['ticket']['patient_id'])}} </td>
-                    <td>{{number_format($payment[0]['ticket']['total_cost'])}} </td>                      
+                    <td class="font-weight-bold">{{number_format($payment[0]['ticket']['total_cost'])}} </td>                      
                     <td title="By Cash"> {{Arr::join($cashes,', ')}}</td>
                     <td title="By POS">{{Arr::join($pos,', ')}}</td>
                     <td title="By Transfer">{{Arr::join($transfers,', ')}}</td>                    
-                    <td>{{number_format($each_pay)}} </td>
+                    <td class="font-weight-bold">{{number_format($each_pay)}} </td>
                     <!--<td>{{ number_format(($payment[0]['ticket']['payment_completed']=="no")? ( $payment[0]['ticket']['total_cost'] - $payment[0]['ticket']['amount_paid']):0) }} </td>
                    <td>{{number_format($payment[0]['ticket']['refund'])}} </td>-->
                 </tr>
@@ -56,11 +56,11 @@
                     <th>S/N</th>
                     <th>ticket no </th>
                     <th>name</th>
-                    <th><small>Total bill</small><br/>{{number_format($total_bill)}}</th>
-                    <th><small>cash</small><br/>{{number_format($allcash)}}</th>
-                    <th><small>pos</small><br/>{{number_format($allpos)}}</th>
-                    <th><small>transfer</small><br/>{{number_format($alltransfer)}}</th>
-                    <th><small>total pay</small><br/>{{number_format($total_pay)}}</th>
+                    <th><small class="font-weight-bold">Total bill</small><br/>{{number_format($total_bill)}}</th>
+                    <th><small class="font-weight-bold">cash</small><br/>{{number_format($allcash)}}</th>
+                    <th><small class="font-weight-bold">pos</small><br/>{{number_format($allpos)}}</th>
+                    <th><small class="font-weight-bold">transfer</small><br/>{{number_format($alltransfer)}}</th>
+                    <th><small class="font-weight-bold">total pay</small><br/>{{number_format($total_pay)}}</th>
                     <!--<th><small>balance</small><br/>0.00</th>
                     <th><small>refund</small><br/>0.00</th>     -->             
                 </tr>

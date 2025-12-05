@@ -104,7 +104,8 @@ class DrugController extends Controller
             return response()->json(['status'=>$respStatus]);
         }
     }
-         public function updateDrugCategStatus(Request $request){
+    
+    public function updateDrugCategStatus(Request $request){
           if($request->ajax()){
             $data = $request->all(); $respStatus = "1";            
             if($data['status']=="active") :  $respStatus = "0";  endif;            

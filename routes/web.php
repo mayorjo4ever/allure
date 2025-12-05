@@ -104,7 +104,13 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('submit-text-bill-template-form','BillingController@submit_text_bill_template_form');
         Route::post('update-bill-template-child-status','BillingController@update_bill_template_child_status');
         Route::get('delete-bill_type/{id}','BillingController@delete_bill_type');
-
+        
+        ##Insurances 
+        Route::get('accounts', 'InsuranceController@accounts');
+        Route::match(['get','post'],'add-edit-account/{id?}', 'InsuranceController@add_edit_account');
+        Route::post('update-bank-account-status', 'InsuranceController@updateBankAccountStatus');        
+        
+        
         /** manage customers **/
         Route::get('customers','UserController@students');
         Route::get('families','UserController@families');

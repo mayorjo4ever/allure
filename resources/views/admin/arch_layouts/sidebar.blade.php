@@ -386,6 +386,22 @@
                                 </i> Payments & Receipts
                             </a>
                         </li>@endcan 
+                       
+                        
+                        @can('view-accounts')
+                        <li>
+                            <a href="{{url('admin/accounts')}}"  @if(Session::get('subpage')==="accounts")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> Our Bank Accounts
+                            </a>
+                        </li>@endcan 
+                        @can('create-new-account')
+                        <li>
+                            <a href="{{url('admin/add-edit-account')}}"  @if(Session::get('subpage')==="new_account")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> Create New Account
+                            </a>
+                        </li>@endcan 
                     </ul>
                 </li>   @endcan
                
