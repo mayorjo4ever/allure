@@ -19,8 +19,8 @@ class Lense extends Model
     {
         return match($this->type_id) {
             1 => 'White',
-            2 => 'Photo AR',
-            3 => 'Blue Cut',
+            2 => 'Photo ARC',
+            3 => 'Blue Cut Photo',
             default => 'Unknown',
         };
     }

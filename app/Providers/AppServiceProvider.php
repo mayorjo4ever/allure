@@ -18,8 +18,8 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'drug' => Drug::class,
             'White' => Lense::class,
-            'Photo AR' => Lense::class,
-            'Blue Cut' => Lense::class,
+            'Photo ARC' => Lense::class,
+            'Blue Cut Photo' => Lense::class,
             'frame' => Frame::class
         ]);
     }
