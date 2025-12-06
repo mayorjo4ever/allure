@@ -21,7 +21,7 @@ class Lense extends Model
             1 => 'White',
             2 => 'Photo ARC',
             3 => 'Blue Cut Photo',
-            default => 'Unknown',
+            // default => 'Unknown',
         };
     }
 }
