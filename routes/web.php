@@ -107,8 +107,11 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         
         ##Insurances 
         Route::get('accounts', 'InsuranceController@accounts');
+        Route::get('organizations', 'InsuranceController@organizational_bodies');
         Route::match(['get','post'],'add-edit-account/{id?}', 'InsuranceController@add_edit_account');
+        Route::match(['get','post'],'add-edit-organization/{id?}', 'InsuranceController@add_edit_organization');
         Route::post('update-bank-account-status', 'InsuranceController@updateBankAccountStatus');        
+        Route::post('update-organization-status', 'InsuranceController@updateOrganizationStatus');        
         
         
         /** manage customers **/

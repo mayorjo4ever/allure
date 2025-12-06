@@ -402,6 +402,14 @@
                                 </i> Create New Account
                             </a>
                         </li>@endcan 
+                        
+                        @can('view-organizations')
+                        <li>
+                            <a href="{{url('admin/organizations')}}"  @if(Session::get('subpage')==="organizations")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i>Organizational Bodies
+                            </a>
+                        </li>@endcan 
                     </ul>
                 </li>   @endcan
                
