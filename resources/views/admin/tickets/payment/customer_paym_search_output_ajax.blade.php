@@ -87,6 +87,10 @@
                     <label class="col-md-5 font-weight-600">&nbsp; </label>
                     <div class="col-md-7">
                         <button type="submit" class="btn btn-primary btn-lg w-100 font-weight-700 exec-payment-btn ladda-button" data-style="expand-right"> Pay : <span class="total-amount">0.00</span> </button>
+                        @can('add-bill-to-invoice')
+                        <br/><br/>                        
+                         <button type="button" class="btn btn-outline-danger btn-lg w-100 font-weight-700" data-toggle="modal" data-target="#payment_invoice_modal"> Add To Invoice : {{number_format($balance)}} </button>
+                        @endcan
                     </div>
             </div></div>
             </form>

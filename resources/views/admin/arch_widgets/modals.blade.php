@@ -159,3 +159,8 @@
             <div id="doctor-calendar" class="mt-3"></div>
             <div id="time-slots" class="mt-3"></div>
  </x-admin.modal>
+
+ <x-admin.modal id="payment_invoice_modal" title="Add Bill To Invoice" size="lg">
+       <input type="hidden" value="" id="ref_no"/>
+            
+ </x-admin.modal>

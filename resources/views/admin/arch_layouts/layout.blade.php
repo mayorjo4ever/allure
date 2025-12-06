@@ -83,8 +83,10 @@
             </script>
      
        @if(in_array(Session::get('subpage'),['customer-add','families',
-       'admin-staff','app_consulting']))
+       'admin-staff','app_consulting','pending-payments']))
+       
         @include('admin.arch_widgets.modals')
+        
        @endif
         
         <script src="{{asset('template/dist/ckeditor5-build-classic/ckeditor.js')}}"></script>

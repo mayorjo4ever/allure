@@ -396,12 +396,13 @@
                             </a>
                         </li>@endcan 
                         @can('create-new-account')
-                        <li>
+<!--                        <li>
                             <a href="{{url('admin/add-edit-account')}}"  @if(Session::get('subpage')==="new_account")  class="mm-active"  @endif>
                                 <i class="metismenu-icon">
                                 </i> Create New Account
                             </a>
-                        </li>@endcan 
+                        </li>-->
+                        @endcan 
                         
                         @can('view-organizations')
                         <li>

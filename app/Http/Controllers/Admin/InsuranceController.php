@@ -27,7 +27,7 @@ class InsuranceController extends Controller
           return view('admin.insurance.accounts',compact('page_info','accounts','btns'));
     }
       public function add_edit_account(Request $request, $id=null) {
-       Session::put('page','billings'); Session::put('subpage','new_account');
+       Session::put('page','billings'); Session::put('subpage','accounts');
         if($id==''){
            $page_info = ['title'=>'Create New Bank Account','icon'=>'pe-7s-cash','sub-title'=>'Create / Edit  Bank Account'];
            $account = new Account(); $message = "New Bank Account Successfully Saved";
@@ -109,7 +109,7 @@ class InsuranceController extends Controller
           return view('admin.insurance.organ_bodies',compact('page_info','organizations','btns'));
     }
     public function add_edit_organization(Request $request, $id=null) {
-       Session::put('page','billings'); Session::put('subpage','new_organization');
+       Session::put('page','billings'); Session::put('subpage','organizations');
         if($id==''){
            $page_info = ['title'=>'Create New Organizational Body','icon'=>'fa fa-users','sub-title'=>'Create / Edit  Bank Account'];
            $organization = new Organization(); $message = "Organizational Body Successfully Saved";
