@@ -162,5 +162,5 @@
 
  <x-admin.modal id="payment_invoice_modal" title="Add Bill To Invoice" size="lg">
        <input type="hidden" value="" id="ref_no"/>
-            
+       <x-admin.invoice-form></x-admin.invoice-form>
  </x-admin.modal>
