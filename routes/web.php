@@ -112,6 +112,8 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::match(['get','post'],'add-edit-organization/{id?}', 'InsuranceController@add_edit_organization');
         Route::post('update-bank-account-status', 'InsuranceController@updateBankAccountStatus');        
         Route::post('update-organization-status', 'InsuranceController@updateOrganizationStatus');        
+        Route::post('load-organizational-bodies', 'InsuranceController@load_organizational_bodies');        
+        Route::post('check-our-initial-bills', 'InsuranceController@check_our_initial_bills');        
         
         
         /** manage customers **/
@@ -233,6 +235,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('fetch-ticket-payment-by-dates','PaymentController@fetch_ticket_payment_by_dates');
         Route::post('fetch-ticket-payment-by-tickets','PaymentController@fetch_ticket_payment_by_tickets');
         Route::get('print-receipt/{ticket_no}','PaymentController@print_receipt');
+        Route::get('print-invoice/{ticket_no}','PaymentController@print_invoice');
         
         // users
          Route::get('users','UserController@users');

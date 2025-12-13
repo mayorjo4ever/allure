@@ -17,6 +17,13 @@
                      Provide Organization Name
                   </div>
                </div> <!-- ./ col-md-3 -->
+               <div class="col-md-5 mb-3">
+                  <label for="title"  style="font-weight: 600">HMO Enroll No. </label>
+                  <input type="text" name="enrole_no" id="enrole_no" class="form-control form-control-lg"  placeholder="HMO Enroll No. "  @if(!empty($organization->enrole_no)) value="{{$organization->enrole_no}}" @endif  >
+                  <div class="invalid-feedback">
+                     Provide HMO Enroll No. 
+                  </div>
+               </div> <!-- ./ col-md-3 -->
                      
                <div class="col-md-5 mb-3">
                   <label for="title"  style="font-weight: 600">Organization Address </label>
@@ -35,10 +42,10 @@
                </div> <!-- ./ col-md-3 -->   
                
                <div class="col-md-5 mb-3">
-                  <label for="price"  style="font-weight: 600"> Contact Number </label>
-                  <input type="text" name="number" id="number" class="form-control form-control-lg"  placeholder=" Contact Number"  @if(!empty($organization->phone)) value="{{$organization->phone}}" @endif  >
+                  <label for="price"  style="font-weight: 600"> Contact Phone Number </label>
+                  <input type="text" name="number" id="number" class="form-control form-control-lg"  placeholder=" Contact Phone Number"  @if(!empty($organization->phone)) value="{{$organization->phone}}" @endif  >
                   <div class="invalid-feedback">
-                     Provide Contact Number
+                     Provide Contact Phone Number
                   </div>
                </div> <!-- ./ col-md-3 -->   
                 

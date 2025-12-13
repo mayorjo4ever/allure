@@ -18,7 +18,7 @@
                     <th><small>payment by</small><br/>transfer</th>
                     <th>total pay</th>
                     <th>balance</th>
-                    <th>refund</th>
+                    <th>Print<br/><small>Invoice</small></th>
                 </tr>
                 @php $total_bill = 0;  $each_pay =0;   $allcash = 0; $allpos = 0; $alltransfer = 0;   
                 $each_balance = 0; $refunds = 0;  $total_balance = 0 ;
@@ -38,7 +38,13 @@
                         $each_balance = ($payment['payment_completed']==false)? ( $payment['total_cost'] - $payment['amount_paid']):0; 
                         
                     @endphp
-                    <td>{{($k+1)}}</td>
+                    <td style="width: 100px;"> 
+                          <div class="checkbox-wrapper-13"> {{($k+1)}} &nbsp; &nbsp;
+                              <input onclick="" id="c1-{{$k}}" value="{{$payment['id']}}" type="checkbox" name="bills[{{$k}}][]" class="bill-payment">
+                            <label for="c1-{{$k}}">{{--$payment['id']--}}</label>
+                          </div>
+                     
+                    </td>
                     <td>{{$payment['ticketno']}} </td>
                     <td>{{ users_name($payment['patient_id'])}} </td>
                     <td>{{number_format($payment['total_cost'])}} </td>                      
@@ -46,8 +52,8 @@
                     <td title="By POS">{{Arr::join($pos,', ')}}</td>
                     <td title="By Transfer">{{Arr::join($transfers,', ')}}</td>                       
                     <td>{{number_format($each_pay)}} </td>
-                    <td><button type="button" onclick="showTab('tab-c-1'),paste_ticket_no('{{$payment['ticketno']}}')" class="btn btn-info btn-lg font-weight-800"> Pay {{number_format($each_balance)}}</button></td>
-                   <td>{{number_format($payment['refund'])}} </td>
+                    <td><button type="button" onclick="showTab('tab-c-1'),paste_ticket_no('{{$payment['ticketno']}}')" class="btn btn-info btn-lg font-weight-800"> Pay {{number_format($each_balance)}}</button> </td>
+                    <td> <a href="{{url('admin/print-invoice/'.base64_encode($payment['ticketno']))}}" target="_blank" title="Print Invoice" class="btn btn-warning"><strong>Print Invoice</strong></a> </td>
                 </tr>
                   @php  
                     $allcash += $cash_sum;
@@ -64,7 +70,7 @@
                  @endphp
                 
                 <tr class="text-uppercase">
-                    <th>S/N</th>
+                    <th >S/N</th>
                     <th>ticket no </th>
                     <th>name</th>
                     <th><small>Total bill</small><br/>{{number_format($total_bill)}}</th>
@@ -73,7 +79,7 @@
                     <th><small>transfer</small><br/>{{number_format($alltransfer)}}</th>
                     <th><small>total pay</small><br/>{{number_format($total_pay)}}</th>
                     <th><small>balance</small><br/>{{number_format($total_balance)}}</th>
-                    <th><small>refund</small><br/>{{number_format($refunds)}}</th>                  
+                    <th><small>Print</small><br/>{{--number_format($refunds)--}}</th>                  
                 </tr>
                  <tr class="text-uppercase">
                     <th colspan="6" class="text-right">&nbsp; </th>
@@ -82,8 +88,11 @@
                     <th colspan="2"><small>balance</small><br/>{{number_format($total_balance)}}</th>
                 </tr>
             </table>
-        </div>
-        
+        </div>        
+    </div>
+    
+    <div class="col-md-6 pull-right">
+        <button disabled="" onclick="load_organizational_bodies()" data-toggle="modal" data-target="#payment_invoice_modal" class="btn btn-success btn-lg p-3 invoice_btn"><strong> Add Selected Bills To Invoice</strong> </button>
     </div>
 </div>
 @endempty

@@ -23,6 +23,7 @@
             <tr>
                 <th class="pl-4"># ID </th>              
                 <th>Name</th>        
+                <th>HMO No.</th>        
                 <th>Address</th>        
                 <th>Contact Email</th>               
                 <th>Contact Phone </th>               
@@ -35,6 +36,7 @@
             <tr class="{{ ($organization['status']==1) ?"active":"inactive" }}">
                 <td class="text-muted pl-4"># {{ $organization->id}} </td>               
                 <td> {{ $organization->name}} </td>                
+                <td> {{ $organization->enrole_no}} </td>                
                 <td> {{ $organization->address}} </td>                
                 <td> {{ $organization->email }} </td>
                 <td> {{ $organization->phone }} </td>

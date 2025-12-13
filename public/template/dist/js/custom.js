@@ -622,7 +622,19 @@ $(document).on('click','.role-perm-btn',function(){
 
 });
 
-
+// checkboxes for invoice bills
+$(document).on('click','.bill-payment',function(){
+    var bill_id = $(this).val();
+    //var role_id = $(this).data('role');  var status = 'inactive';
+    $(this).closest('tr').removeClass('table-success');
+    if($(this).prop('checked')) { // status = 'active';
+       $(this).closest('tr').addClass('table-success');
+   }
+  
+  checkbills();
+});
+   
+    
 // checkboxes permissions
 $(document).on('click','.role-perm-custom',function(){
     var perm = $(this).val();
@@ -3242,6 +3254,33 @@ function addConsultTasks(task="notes"){
     });    
 }
 
+    
+    function set_invoice_bill(amount=0){
+        elem = $('#invoice-amount');
+       elem.val(numberSeperator(amount,true));
+        ;
+    }
+    
+    
+    function load_organizational_bodies(elem="organ_body"){
+     // elem = $(".doctors_consultation_summary");   
+     var process = "<option value=''>loading...</option>";
+     $.ajax({
+        headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
+        url: '/admin/load-organizational-bodies',
+        type: 'POST', data: {  },
+        beforeSend:function(){ $('#'+elem).html(process);  },
+        success: function (response) {           
+           //  showpop(response);
+           $('#'+elem).html(response.view);        
+           
+        }, error:function(jhx,textStatus,errorThrown){ //stopLoader();
+                console.log(""+textStatus+' - '+errorThrown);
+                checkStatus(jhx.status);
+            }
+    });    
+}
+
  function display_this_consultation(app_id,patient_id){
      elem = $(".past_consultation_summary");        
      // general_body = $(".consult-body-container");
@@ -3269,6 +3308,8 @@ function addConsultTasks(task="notes"){
             }
     });    
 }
+
+
 
     // when doctor is commentingn on patient's complaint, after admitting  
     function save_doctors_comment(){
@@ -3736,5 +3777,47 @@ function addConsultTasks(task="notes"){
                });  // end ajax submit slot 
                }
             });
-
     }
+    
+    function check_our_initial_bills(org_id){
+        console.log(org_id); elem_new = $('#org-new-bills');  elem_old = $('#org-initial-bills'); 
+        new_bills = $('#new_bills').val(); var process = "<span class='fa fa-spin fa-spinner fa-3x text-dark'></span>"; 
+        $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/check-our-initial-bills",   
+                   beforeSend:function(){ elem_old.html(process);  elem_new.html(process);},
+                   data: {                                               
+                       org_id : org_id, new_bills:new_bills
+                   },
+                   success: function(response) {
+                      elem_new.html(response.new_bills);
+                      elem_old.html(response.initial_bills);
+                      
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+    }
+    
+    
+    function checkbills(){
+        var bills = []; 
+        $("input:checkbox.bill-payment:checked").each(function () {
+            bills.push($(this).val());
+        });
+       if(bills.length ==0){
+           $('button.invoice_btn').prop('disabled',true);
+           $('#new_bills').val('');
+       }
+       else{
+           $('button.invoice_btn').prop('disabled',false);
+           $('#new_bills').val(bills);
+       }
+       
+    }
+    
+    

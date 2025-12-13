@@ -1,5 +1,5 @@
 <?php
-# use Milon\Barcode\Facades\DNS1DFacade as DNS1D;
+ use Carbon\Carbon; 
 ?>
 <div class="row"><div class="col-sm-12"><br/>
         <center>
@@ -22,14 +22,14 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3" class="text-uppercase font-weight-700 text-center"><hr class="p-0 p-0 mt-0 mb-0"/> @if($ticket_info->payment_completed) Payment Receipt @else payment-Invoice @endif <hr class="p-0 p-0 mt-0 mb-0"/></td>
+            <td colspan="3" class="text-uppercase font-weight-700 text-center"><hr class="p-0 p-0 mt-0 mb-0"/>payment-Invoice <hr class="p-0 p-0 mt-0 mb-0"/></td>
         </tr>
         <tr style="font-size: 12px">
 
             <td colspan="3" class="text-uppercase font-weight-700">Ticket No:&nbsp;&nbsp;<span class="pull-right">{{$ticket_info->ticketno}} </span> <br/>
                 Hosp. No:&nbsp;&nbsp; <span class="pull-right">{{ $ticket_info->appointment->patient->regno}}</span> <br/>
                 name:&nbsp;&nbsp;  <span class="pull-right">{{ users_name($ticket_info->appointment->user_id )}}</span>  <br/>
-                payment date:&nbsp;&nbsp;  <span class="pull-right">{{extract_dates($ticket_info['payment'])}}</span> 
+                date:&nbsp;&nbsp;  <span class="pull-right">{{  Carbon::parse($ticket_info['updated_at'])->toDayDateTimeString(); }}</span> 
             </td>
         </tr>
 
@@ -60,7 +60,8 @@
                    @endforeach
                    <hr class="p-0 p-0 mt-1 mb-1"/>
                    <strong>TOTAL COST:  <span class="pull-right">{{number_format($ticket_info->total_cost)}}</span> </strong>
-                    <hr class="p-0 p-0 mt-1 mb-1"/>
+                  
+                   <hr class="p-0 p-0 mt-1 mb-1"/>
                   <strong> AMOUNT PAID :  <span class="pull-right">{{number_format($ticket_info->amount_paid)}}</span> </strong>
                    <br/> <small>{{ print_paymode($ticket_info->payment) }}  </small> <br/>
 
@@ -69,11 +70,11 @@
                    @endif
 
                    <strong>BALANCE : <span class="pull-right">{{ number_format(($ticket_info->total_cost - $ticket_info->amount_paid),2) }} </span> </strong><br/>
-                   <span class="text-uppercase">Payment Completed : <span class="pull-right font-weight-bold">{{ ($ticket_info->payment_completed) ? "Yes":"No" }}</span> </span> <br/>
+                   <!--<span class="text-uppercase">Payment Completed : <span class="pull-right font-weight-bold">{{ ($ticket_info->payment_completed) ? "Yes":"No" }}</span> </span> <br/>-->
                     <hr class="p-0 p-0 mt-1 mb-1"/>
                   <center> <?php $Collector ?>                  
                    
-                  Cashier: {{ admin_info(1)['fullname']}} 
+                  <!--Cashier: {{ admin_info(1)['fullname']}}--> 
                     
                   </center>
 

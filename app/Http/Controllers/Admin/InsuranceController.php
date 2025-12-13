@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\CustomerBill;
 use App\Models\Organization;
+use App\Models\PaymentInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
 use function redirect;
 use function response;
@@ -90,6 +93,33 @@ class InsuranceController extends Controller
             return response()->json(['status'=>$respStatus]);
         }
     }
+    
+     public function load_organizational_bodies(Request $request){     
+          if($request->ajax()){
+            $data = $request->all(); $respStatus = "1";            
+            $bodies = Organization::where('status',1)->get(); // active bodies            
+            return response()->json([
+                'view' => (string) View::make('admin.insurance.organ_bodies_ajax')
+                        ->with(compact('bodies'))
+                    ]);
+        }
+    }
+    
+    public function check_our_initial_bills(Request $request) {
+         if($request->ajax()){
+             $org_id = $request->org_id;  $bills = explode(",",$request->new_bills);
+             $initial_bills = PaymentInvoice::where('organization_id',$org_id)
+                     ->where('status','opened')->get();
+             $new_bills = CustomerBill::with('user')->whereIn('id',$bills)->get();
+             return response()->json([
+                 'initial_bills'=>(string)View::make('admin.insurance.organ_init_bills_ajax')->with(compact('initial_bills','org_id')),
+                 'new_bills'=>(string)View::make('admin.insurance.organ_new_bills_ajax')->with(compact('new_bills','org_id'))
+                 
+              ]);
+         }
+    }
+    
+    
      public function updateOrganizationStatus(Request $request){
           if($request->ajax()){
             $data = $request->all(); $respStatus = "1";            
@@ -108,6 +138,7 @@ class InsuranceController extends Controller
            $organizations = Organization::all();                       
           return view('admin.insurance.organ_bodies',compact('page_info','organizations','btns'));
     }
+    
     public function add_edit_organization(Request $request, $id=null) {
        Session::put('page','billings'); Session::put('subpage','organizations');
         if($id==''){
@@ -146,6 +177,7 @@ class InsuranceController extends Controller
             $organization->address = $request->address;
             $organization->phone = $request->number;            
             $organization->email = $request->email;
+            $organization->enrole_no = $request->enrole_no;
             $organization->status = 1;            
             $organization->save();
 

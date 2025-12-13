@@ -36,10 +36,11 @@ class PaymentController extends Controller
     #############################
      public function list_pending_payments(Request $request) {
           if($request->ajax()){
-            ## print "<pre>"; $data = $request->all();  print_r($data);  die;            
+            ##  print "<pre>"; 
+            ## $data = $request->all();  print_r($data);  die;            
             ## $payments = CustomerTicket::with('payment')->where(['create_mode'=>'completed','payment_completed'=>'no'])->get()->toArray(); ## groupBy('ticket_id')
-            $payments = CustomerBill::with('payment')->where(['payment_completed'=>false])->get()->toArray(); ## groupBy('ticket_id')
-            # print_r($payments);  die; 
+            $payments = CustomerBill::with('payment','user')->where(['payment_completed'=>false])->get()->toArray(); ## groupBy('ticket_id')
+           # print_r($payments);  die; 
              return response()->json(['type'=>'success',
                 'view'=>(String)View::make('admin.tickets.payment.customer_pending_payment_ajax')->with(compact('payments'))
                 ]);
@@ -234,5 +235,24 @@ class PaymentController extends Controller
         # $qrcodeImage = $qrcode->getBarcodePNG('Hello World', 'QRCODE');
         
          return view('admin.tickets.receipt.printout')->with(compact('ticket_info','page_info','barcodeImage'));
+     }
+     
+     public function print_invoice($ticket_no) {
+         $page_info['title'] = "Payments & Receipts ";
+         $ticket_no = base64_decode($ticket_no); 
+         $ticket_info = CustomerBill::with(['investigations.template','prescriptions.item',
+             'appointment.patient','payment'])->where('ticketno',$ticket_no)->get()->first();
+         #print "<pre>"; 
+         #print_r($ticket_info->toarray());  die; 
+          // Instantiate the classes
+        $barcode = new DNS1D();
+        $qrcode = new DNS2D();
+        $codeno = $ticket_no;
+        // Generate barcodes
+        // $barcodeImage = $barcode->getBarcodePNG($codeno, 'C128',1.5,40,'000',true);
+        $barcodeImage = $qrcode->getBarcodePNG($codeno, 'QRCODE');
+        # $qrcodeImage = $qrcode->getBarcodePNG('Hello World', 'QRCODE');
+        
+         return view('admin.tickets.receipt.invoice')->with(compact('ticket_info','page_info','barcodeImage'));
      }
 }
