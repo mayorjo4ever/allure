@@ -3805,7 +3805,7 @@ function addConsultTasks(task="notes"){
     
     
     function checkbills(){
-        var bills = []; 
+        var bills = []; elem_new = $('#org-new-bills');  elem_old = $('#org-initial-bills'); 
         $("input:checkbox.bill-payment:checked").each(function () {
             bills.push($(this).val());
         });
@@ -3817,7 +3817,32 @@ function addConsultTasks(task="notes"){
            $('button.invoice_btn').prop('disabled',false);
            $('#new_bills').val(bills);
        }
-       
+       // 
+        elem_new.html("");
+        elem_old.html("");
     }
     
-    
+    function submit_organization_bill(form){
+        var data = form.serialize();  btn = "";
+        var process = "<span class='fa fa-spin fa-spinner fa-3x text-dark'></span>"; 
+        $.ajax({
+            headers:{
+              'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            },
+            type:'post',
+            url: "/admin/submit-organization-bill",   
+            beforeSend:function(){ elem_old.html(process); // elem_new.html(process);
+            },
+            data: data, 
+            success: function(response) {
+              elem_new.html(response.our_bills);
+              elem_old.html('');
+               if(response.status==="error"){                
+                 showpop(response.message,response.status); 
+             }
+            },
+            error: function(xhr) {
+                showpop(xhr.responseJSON.message,"error");
+            }
+        });  // end ajax submit slot 
+    }

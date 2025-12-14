@@ -8,6 +8,7 @@ use App\Models\CustomerBill;
 use App\Models\Organization;
 use App\Models\PaymentInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
@@ -101,24 +102,120 @@ class InsuranceController extends Controller
             return response()->json([
                 'view' => (string) View::make('admin.insurance.organ_bodies_ajax')
                         ->with(compact('bodies'))
-                    ]);
+                  ]);
         }
     }
     
     public function check_our_initial_bills(Request $request) {
          if($request->ajax()){
              $org_id = $request->org_id;  $bills = explode(",",$request->new_bills);
-             $initial_bills = PaymentInvoice::where('organization_id',$org_id)
+             $initial_bills = PaymentInvoice::with('user','bill')->where('organization_id',$org_id)
                      ->where('status','opened')->get();
              $new_bills = CustomerBill::with('user')->whereIn('id',$bills)->get();
              return response()->json([
                  'initial_bills'=>(string)View::make('admin.insurance.organ_init_bills_ajax')->with(compact('initial_bills','org_id')),
                  'new_bills'=>(string)View::make('admin.insurance.organ_new_bills_ajax')->with(compact('new_bills','org_id'))
-                 
+               ]);
+         }
+    }
+/**
+    public function submit_organization_bill(Request $request) {
+         if($request->ajax()){
+             # print "<pre>";  // print_r($request->all()); die;      
+             $org_id = $request->organization_id; 
+             $bills = CustomerBill::with('user')->whereIn('id',$request->bill_ids)->get();
+            # print_r($bills->toarray()); die;
+             $account = Account::where('active',1)->first();
+             $i = 0; 
+             $user = Auth('admin')->user();
+             
+             foreach($bills as $bill):               
+                 $invoice = PaymentInvoice::updateOrCreate([
+                     'organization_id'=>$org_id,
+                     'customer_bill_id'=>$bill->id,
+                     'appointment_id'=>$bill->appointment_id,
+                     'patient_id'=>$bill->patient_id,
+                     'account_id'=>$account->id
+                 ],[
+                     'amount'=>($bill->total_cost - $bill->amount_paid),
+                     'discount'=>$request->discounts[$i],
+                     'created_by'=>$user->id
+                 ]);
+                 $i++;
+             endforeach;
+            # die; 
+             $initial_bills = PaymentInvoice::with('user','bill')->where('organization_id',$org_id)
+                     ->where('status','opened')->get();
+             
+             return response()->json([
+                 'our_bills'=>(string)View::make('admin.insurance.organ_init_bills_ajax')->with(compact('initial_bills','org_id'))
               ]);
          }
     }
     
+   **/
+    
+    public function submit_organization_bill(Request $request)
+    {
+        if (!$request->ajax()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'organization_id' => 'required|exists:organizations,id',
+            'bill_ids'        => 'required|array',
+            'bill_ids.*'      => 'exists:customer_bills,id',
+        ]);
+
+        $org_id  = $request->organization_id;
+        $billIds = $request->bill_ids;
+
+        // 🔒 Prevent cross-organization reuse
+        $conflict = PaymentInvoice::whereIn('customer_bill_id', $billIds)
+            ->where('organization_id', '!=', $org_id)
+            ->exists();
+
+        if ($conflict) {
+            return response()->json([
+                'status'=>'error',
+                'message' => 'One or more bills are already assigned to another organization.'
+            ],200);
+        }
+
+        $bills   = CustomerBill::with('user')->whereIn('id', $billIds)->get();
+        $account = Account::where('active', 1)->firstOrFail();
+        $user    = Auth('admin')->user();
+
+        foreach ($bills as $i => $bill) {
+            PaymentInvoice::updateOrCreate(
+                [
+                    'organization_id'   => $org_id,
+                    'customer_bill_id'  => $bill->id,
+                ],
+                [
+                    'appointment_id' => $bill->appointment_id,
+                    'patient_id'     => $bill->patient_id,
+                    'account_id'     => $account->id,
+                    'amount'         => ($bill->total_cost - $bill->amount_paid),
+                    'discount'       => $request->discounts[$i] ?? 0,
+                    'created_by'     => $user->id,
+                ]
+            );
+        }
+
+        $initial_bills = PaymentInvoice::with('user', 'bill')
+            ->where('organization_id', $org_id)
+            ->where('status', 'opened')
+            ->get();
+
+        return response()->json([
+            'our_bills' => (string) view(
+                'admin.insurance.organ_init_bills_ajax',
+                compact('initial_bills', 'org_id')
+            )
+        ]);
+    }
+
     
      public function updateOrganizationStatus(Request $request){
           if($request->ajax()){

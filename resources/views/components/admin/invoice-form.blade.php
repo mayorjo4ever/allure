@@ -12,17 +12,14 @@
 </div>
 
 
-<div class="row mt-2 pt-2"> 
-  <input id="new_bills" name="new_bills" type="hidden" /> 
-  <div class="col-sm-12 mb-3">
-    <div id="org-new-bills"></div>
-  </div>
-  <div class="col-sm-12">        
-         <button type="submit" class="btn btn-success p-2 btn-block " style="font-size: 1.5rem" placeholder="Discount Amount">
-             Add Bills
-         </button>             
+<form method="post" id="organization_bill" onsubmit="submit_organization_bill($(this))" action="javascript:void(0)">@csrf
+    <div class="row mt-2 pt-2"> 
+      <input id="new_bills" name="new_bills" type="hidden" /> 
+      <div class="col-sm-12 mb-3">
+        <div id="org-new-bills"></div>
+      </div> 
     </div>
-</div>
+    </form>
 
 <div class="row mt-2 pt-2"> 
     <div class="col-sm-12 mb-3">
