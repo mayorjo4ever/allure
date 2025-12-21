@@ -38,4 +38,8 @@ class CustomerBill extends Model
     {
         return $this->belongsTo(User::class,'patient_id');
     }
+    
+    public function invoice() {
+        return $this->hasOne(PaymentInvoice::class);
+    }
 }

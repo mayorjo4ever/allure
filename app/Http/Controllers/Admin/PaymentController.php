@@ -36,11 +36,11 @@ class PaymentController extends Controller
     #############################
      public function list_pending_payments(Request $request) {
           if($request->ajax()){
-            ##  print "<pre>"; 
+            #  print "<pre>"; 
             ## $data = $request->all();  print_r($data);  die;            
             ## $payments = CustomerTicket::with('payment')->where(['create_mode'=>'completed','payment_completed'=>'no'])->get()->toArray(); ## groupBy('ticket_id')
-            $payments = CustomerBill::with('payment','user')->where(['payment_completed'=>false])->get()->toArray(); ## groupBy('ticket_id')
-           # print_r($payments);  die; 
+            $payments = CustomerBill::with('payment','user','invoice.organization')->where(['payment_completed'=>false])->get()->toArray(); ## groupBy('ticket_id')
+            #print_r($payments);  die; 
              return response()->json(['type'=>'success',
                 'view'=>(String)View::make('admin.tickets.payment.customer_pending_payment_ajax')->with(compact('payments'))
                 ]);

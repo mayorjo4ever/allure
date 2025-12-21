@@ -10,7 +10,8 @@
             <table class="table w-100 table-bordered border-dark">
                 <tr class="text-uppercase">
                     <th>S/N</th>
-                    <th>ticket no </th>
+                    <th>ticket no                     
+                    </th>
                     <th>name</th>
                     <th>total bill </th>
                     <th><small>payment by</small><br/>cash</th>
@@ -45,7 +46,16 @@
                           </div>
                      
                     </td>
-                    <td>{{$payment['ticketno']}} </td>
+                    <td>
+                        @if(!empty($payment['invoice']))
+                        <span class="badge text-primary border border-1 border-primary">
+                           {{$payment['ticketno']}} <br/> Invoiced To <br/>
+                            {{$payment['invoice']['organization']['name']}} 
+                        </span>
+                        @else 
+                            {{$payment['ticketno']}} 
+                        @endif
+                    </td>
                     <td>{{ users_name($payment['patient_id'])}} </td>
                     <td>{{number_format($payment['total_cost'])}} </td>                      
                     <td title="By Cash"> {{Arr::join($cashes,', ')}}</td>
