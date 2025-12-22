@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
-use NumberToWords\NumberToWords; 
 use function redirect;
 use function response;
 use function view;
@@ -245,10 +244,9 @@ class InsuranceController extends Controller
     public function organization_bills($id) {
         $organization = Organization::with('openedInvoices.user','openedInvoices.bill')->find($id);        
        # print "<pre>";   print_r($organization->toarray()); die;   
-         $page_info = ['title'=>$organization->name."'s Bills",'icon'=>'fa fa-money','sub-title'=>'Invoice Bills To be Paid'];
-        $n2w = new NumberToWords();  
+         $page_info = ['title'=>$organization->name."'s Bills",'icon'=>'pe pe-7s-cash','sub-title'=>'Invoice Bills To be Paid'];       
         Session::put('page','billings'); Session::put('subpage','organizations');
-        return view('admin.insurance.organ_invoice_bills',compact('page_info','organization','n2w'));
+        return view('admin.insurance.organ_invoice_bills',compact('page_info','organization'));
     }
     
     public function add_edit_organization(Request $request, $id=null) {

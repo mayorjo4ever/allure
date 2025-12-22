@@ -39,7 +39,7 @@
                     <small>Discount : &#8358; {{number_format($invoice->discount)}} </small>
                     @php $bills+=$invoice->amount; $discounts +=$invoice->discount; @endphp 
                 </th>
-                <td> <a href="{{url('admin/organization/'.$invoice->id.'/bills')}}" target="_blank"><span class="badge border border-1 border-primary p-3 font-16">
+                <td> <a href="{{url('admin/print-invoice/'.base64_encode($invoice->bill->ticketno))}}" target="_blank"><span class="badge border border-1 border-primary p-3 font-16">
                        {{ $invoice->bill->ticketno}} </span></a> </td>                
                 <td>
                    {{ \Carbon\Carbon::parse($invoice->created_at)->toDayDateTimeString()}}
@@ -55,11 +55,11 @@
         </table>
         </div>
         
-            <h5 class="mt-3"> Final Bills : &#8358; {{number_format($bills - $discounts)}} - 
-            @php $currency = $n2w->getCurrencyTransformer('en');
-            $currency->toWords($bills,'NGN'); @endphp
+            <h6 class="mt-3 text-capitalize"> Total Bills: <strong>&#8358; {{number_format($bills - $discounts)}}  </strong>
+               <br/>  In Words :   
+           {{ number_to_words($bills); }}
             
-            </h5>
+            </h6>
             
         </div>
          @else 

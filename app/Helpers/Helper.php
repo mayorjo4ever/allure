@@ -8,6 +8,7 @@ use App\Models\CustomerTicket;
 use App\Models\DoctorAvailability;
 use App\Models\FamilyGroup;
 use App\Models\InvestigationTemplate;
+use NumberToWords\NumberToWords;
 use App\Models\User as User2;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
@@ -290,3 +291,35 @@ function get_new_outsider_id(){
     function appointment_details($id){
         return Appointment::find($id);
     }
+    
+    
+if (! function_exists('number_to_words')) {
+
+    /**
+     * Convert number / amount to words (NGN).
+     *
+     * @param float|int $amount
+     * @return string
+     */
+     
+    function number_to_words($amount)
+    {
+        if (! is_numeric($amount)) {
+            return '';
+        }
+
+        $numberToWords = new NumberToWords();
+        $numberTransformer = $numberToWords->getNumberTransformer('en');
+
+        $naira = floor($amount);
+        $kobo  = round(($amount - $naira) * 100);
+
+        $words = $numberTransformer->toWords($naira) . ' naira';
+
+        if ($kobo > 0) {
+            $words .= ' and ' . $numberTransformer->toWords($kobo) . ' kobo';
+        }
+
+        return ucfirst($words);
+    } 
+}
