@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
+use NumberToWords\NumberToWords; 
 use function redirect;
 use function response;
 use function view;
@@ -232,8 +233,22 @@ class InsuranceController extends Controller
              $btns = [
                  ['name'=>"Create New Organizational Body",'action'=>"admin/add-edit-organization", 'class'=>'btn btn-success'],
                  ];            
-           $organizations = Organization::all();                       
+           $organizations = Organization::withSum(
+            ['openedInvoices as total_opened_amount' => function ($query) {
+                $query->where('status', 'opened');
+            }],
+            'amount'
+            )->get();                       
           return view('admin.insurance.organ_bodies',compact('page_info','organizations','btns'));
+    }
+    
+    public function organization_bills($id) {
+        $organization = Organization::with('openedInvoices.user','openedInvoices.bill')->find($id);        
+       # print "<pre>";   print_r($organization->toarray()); die;   
+         $page_info = ['title'=>$organization->name."'s Bills",'icon'=>'fa fa-money','sub-title'=>'Invoice Bills To be Paid'];
+        $n2w = new NumberToWords();  
+        Session::put('page','billings'); Session::put('subpage','organizations');
+        return view('admin.insurance.organ_invoice_bills',compact('page_info','organization','n2w'));
     }
     
     public function add_edit_organization(Request $request, $id=null) {
@@ -289,3 +304,4 @@ class InsuranceController extends Controller
     }
      
 }
+

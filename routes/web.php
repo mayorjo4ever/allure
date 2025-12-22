@@ -115,6 +115,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('load-organizational-bodies', 'InsuranceController@load_organizational_bodies');        
         Route::post('check-our-initial-bills', 'InsuranceController@check_our_initial_bills');        
         Route::post('submit-organization-bill', 'InsuranceController@submit_organization_bill');        
+        Route::get('organization/{id}/bills', 'InsuranceController@organization_bills');
         
         
         /** manage customers **/

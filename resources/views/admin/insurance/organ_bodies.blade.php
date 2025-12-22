@@ -23,10 +23,9 @@
             <tr>
                 <th class="pl-4"># ID </th>              
                 <th>Name</th>        
-                <th>HMO No.</th>        
+                <th>Opened Bills</th>        
                 <th>Address</th>        
-                <th>Contact Email</th>               
-                <th>Contact Phone </th>               
+                <th>Contact Info </th>                                          
                 @can('modify-organization')<th>Status</th> @endcan
                 @can('edit-organization') <th>Edit </th> @endcan
                 <th>Last Updated </th>
@@ -35,12 +34,14 @@
             <tbody> @foreach($organizations as $organization )
             <tr class="{{ ($organization['status']==1) ?"active":"inactive" }}">
                 <td class="text-muted pl-4"># {{ $organization->id}} </td>               
-                <td> {{ $organization->name}} </td>                
-                <td> {{ $organization->enrole_no}} </td>                
+                <td> {{ $organization->name}} <br/> <b>{{ $organization->enrole_no}}</b> </td>                
+                <th> <a href="{{url('admin/organization/'.$organization->id.'/bills')}}" target="_blank"><span class="badge border border-1 border-primary p-3 font-16">
+                        &#8358; {{number_format($organization->total_opened_amount)}} 
+                     </span></a>
+                </th>
                 <td> {{ $organization->address}} </td>                
-                <td> {{ $organization->email }} </td>
-                <td> {{ $organization->phone }} </td>
-                 @can('modify-organization')
+                <td> {{ $organization->email }}  <br/>  {{ $organization->phone }} </td>
+               @can('modify-organization')
                 <td>
                     @if($organization->status ==1)
                     <a class="updateOrganizationStatus" id="organization_id-{{ $organization->id}}" organization_id="{{ $organization->id}}" href="javascript:void(0)" title="Active">
