@@ -38,9 +38,10 @@
                         {{$invoice->invoice_number}} 
                      </span></a>
                 </th>
-                <td> 0.0</td>                
-                <td> 0.0 </td>             
-                <td> 0.0 </td> 
+                <th>&#8358; {{number_format(calculate_invoice_bill($invoice->invoice_number))}}</th>
+                <th> 0.0 </th>             
+                <th> 0.0 </th>             
+                
              
               @endforeach
                 </tbody>

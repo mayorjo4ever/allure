@@ -338,3 +338,12 @@ function new_org_invoice_no($org_id){
         
         return "{$prefix}{$orgn}{$datePart}{$invoice_no}";
 }
+
+function calculate_invoice_bill($invoice_number){
+    $amounts = PaymentInvoice::where('invoice_number',$invoice_number)
+            ->sum('amount');
+     $discounts = PaymentInvoice::where('invoice_number',$invoice_number)
+             ->sum('discount');
+    
+       return $amounts - $discounts;
+}
