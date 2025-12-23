@@ -116,7 +116,12 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('check-our-initial-bills', 'InsuranceController@check_our_initial_bills');        
         Route::post('submit-organization-bill', 'InsuranceController@submit_organization_bill');        
         Route::get('organization/{id}/bills', 'InsuranceController@organization_bills');
+        Route::post('delete-organization-invoice-bill', 'InsuranceController@delete_organization_invoice_bill');
+        Route::post('finalize-organization-invoice/{id}', 'InsuranceController@finalize_organization_invoice');
         
+        # organization Invoices 
+        Route::get('organizations/invoices/unpaid/{invoice_no?}', 'InsuranceController@organizations_unpaid_onvoices');
+        Route::get('organizations/invoices/paid/{invoice_no?}', 'InsuranceController@organizations_paid_onvoices');
         
         /** manage customers **/
         Route::get('customers','UserController@students');

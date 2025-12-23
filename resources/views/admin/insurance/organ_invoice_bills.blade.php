@@ -26,7 +26,7 @@
                 <th>Amount</th>        
                 <th>Ticket No</th>        
                 <th>Date</th>
-                @can('edit-organization') <th>Delete </th> @endcan
+                @can('delete-invoice-bill') <th>Delete </th> @endcan
                 <th>Last Updated </th>
             </tr>
             </thead>
@@ -44,8 +44,8 @@
                 <td>
                    {{ \Carbon\Carbon::parse($invoice->created_at)->toDayDateTimeString()}}
                 </td>
-               @can('edit-organization') <td >
-                        <a class="btn btn-outline-danger"  href="{{url('admin/add-edit-organization/'.$invoice->id) }}">
+               @can('delete-invoice-bill') <td >
+                   <a class="btn btn-outline-danger" href="javascript:void(0)" onclick="deleteOrganInvoice('{{$invoice->id.'|'.$invoice->bill->ticketno.' - N '.$invoice->amount}}')" >
                             <i class="pe-7s-trash pe-2x" status="active"></i> </a>
                 </td> @endcan
                 <td> {{ \Carbon\Carbon::parse($invoice->updated_at)->diffForHumans()}}</td>
@@ -55,12 +55,16 @@
         </table>
         </div>
         
-            <h6 class="mt-3 text-capitalize"> Total Bills: <strong>&#8358; {{number_format($bills - $discounts)}}  </strong>
-               <br/>  In Words :   
-           {{ number_to_words($bills); }}
-            
-            </h6>
-            
+            <div class="row pt-3">
+            <div class="col-md-6">
+                 <h6 class="mt-3 text-capitalize"> Total Bills: <strong>&#8358; {{number_format($bills - $discounts)}}  </strong>
+               <br/>  In Words :     {{ number_to_words($bills); }}   </h6>
+            </div>
+            <div class="col-md-3"> @if(!empty($organization->openedInvoices->toarray()))
+                <button onclick="finalizeOrganInvoice('{{$organization->id}}')" class="btn btn-block btn-primary btn-lg p-3 font-weight-700">Finalize Invoice </button>
+                @endif
+            </div>
+            </div><!-- ./ row -->
         </div>
          @else 
             <x-un-authorized-page/>

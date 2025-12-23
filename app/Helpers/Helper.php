@@ -8,13 +8,14 @@ use App\Models\CustomerTicket;
 use App\Models\DoctorAvailability;
 use App\Models\FamilyGroup;
 use App\Models\InvestigationTemplate;
-use NumberToWords\NumberToWords;
+use App\Models\PaymentInvoice;
 use App\Models\User as User2;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use NumberToWords\NumberToWords;
 
 
 function timeSchedule($hours,$minutes, $force_show = false){
@@ -322,4 +323,18 @@ if (! function_exists('number_to_words')) {
 
         return ucfirst($words);
     } 
+}
+
+function new_org_invoice_no($org_id){
+    $invoices = PaymentInvoice::
+            where('status','closed')
+            ->distinct('invoice_number')
+            ->count('invoice_number'); 
+    $new_id = $invoices + 1; 
+    $prefix = 'AEI';
+        $datePart = now()->format('ymd'); // e.g. 20251106
+        $invoice_no = str_pad($new_id, 4, '0', STR_PAD_LEFT); // pad appointment ID
+        $orgn = str_pad($org_id, 3, '0', STR_PAD_LEFT); // pad appointment ID
+        
+        return "{$prefix}{$orgn}{$datePart}{$invoice_no}";
 }

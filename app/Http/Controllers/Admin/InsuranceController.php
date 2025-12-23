@@ -227,7 +227,7 @@ class InsuranceController extends Controller
     }
     
     public function organizational_bodies() {
-        Session::put('page','billings'); Session::put('subpage','organizations');
+        Session::put('page','organizations'); Session::put('subpage','organizations');
             $page_info = ['title'=>'Organizational Bodies','icon'=>'fa fa-users','sub-title'=>'Below are list of Our Bank Accounts'];
              $btns = [
                  ['name'=>"Create New Organizational Body",'action'=>"admin/add-edit-organization", 'class'=>'btn btn-success'],
@@ -242,15 +242,60 @@ class InsuranceController extends Controller
     }
     
     public function organization_bills($id) {
-        $organization = Organization::with('openedInvoices.user','openedInvoices.bill')->find($id);        
-       # print "<pre>";   print_r($organization->toarray()); die;   
+        $organization = Organization::with('openedInvoices.user','openedInvoices.bill')->findOrFail($id);        
+        //print "<pre>";   print_r($organization->toarray()); die;   
          $page_info = ['title'=>$organization->name."'s Bills",'icon'=>'pe pe-7s-cash','sub-title'=>'Invoice Bills To be Paid'];       
-        Session::put('page','billings'); Session::put('subpage','organizations');
+        Session::put('page','organizations'); Session::put('subpage','organizations');
         return view('admin.insurance.organ_invoice_bills',compact('page_info','organization'));
     }
     
+    public function delete_organization_invoice_bill(Request $request){
+        if($request->ajax()):
+            # print "<pre>"; print_r($request->all()); 
+            $id = explode('|',$request->params)[0]; 
+            $invoice = PaymentInvoice::findOrFail($id);
+            $invoice->delete();            
+         return response()->json(['message'=>'Invoice Deleted Successfully' ]);
+        endif;
+        
+    }
+     
+    public function finalize_organization_invoice(Request $request , $id){
+        if($request->ajax()):
+            # print "<pre>"; print_r($request->all()); 
+            $invoice_no = new_org_invoice_no($id); 
+            $organ_body = PaymentInvoice::
+                where(['organization_id'=>$id,'status'=>'opened'])
+                ->update([
+                    'status'=>'closed',
+                    'invoice_number'=>$invoice_no
+                ]);                       
+         return response()->json(['message'=>"Invoice Finalized Successfully With No: $invoice_no" ]);
+        endif;
+        
+    }
+    
+    public function organizations_unpaid_onvoices($invoice_no = null) {
+        // $organization = Organization::with('closedInvoices.user','openedInvoices.bill')->findOrFail($id);        
+        $invoices = PaymentInvoice::where('status','closed')
+                ->where('payment_completed','0')
+                ->distinct()->select('invoice_number','organization_id')           
+                ->get(); 
+        
+        # print "<pre>";   print_r($invoices->toarray()); die;   
+        $page_info = ['title'=>"List of Unpaid Invoices ",'icon'=>'pe pe-7s-cash','sub-title'=>'Invoice To be Paid'];       
+        Session::put('page','organizations'); Session::put('subpage','unpaid-invoices');
+        return view('admin.insurance.unpaid_invoices',compact('page_info','invoices'));
+    
+    }
+    
+    public function organizations_paid_onvoices($invoice_no = null) {
+        
+    }
+    
+    
     public function add_edit_organization(Request $request, $id=null) {
-       Session::put('page','billings'); Session::put('subpage','organizations');
+       Session::put('page','organizations'); Session::put('subpage','organizations');
         if($id==''){
            $page_info = ['title'=>'Create New Organizational Body','icon'=>'fa fa-users','sub-title'=>'Create / Edit  Bank Account'];
            $organization = new Organization(); $message = "Organizational Body Successfully Saved";

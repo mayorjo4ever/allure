@@ -3846,3 +3846,105 @@ function addConsultTasks(task="notes"){
             }
         });  // end ajax submit slot 
     }
+    
+    function deleteOrganInvoice(params){
+        info = params.split('|');  /// investigation-id | name       
+        //var patient_id = $('input#patient').val();
+        //var app_id = $('#app_id').val(); // appointment id
+        Swal.fire({
+           title: 'Delete This Invoice Bill ?',
+           text: info[1],
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes, Delete!'
+         }).then((result) => {
+           if (result.isConfirmed) {
+               //
+                 Swal.fire({
+                  title: 'Deleting Invoice Bill...',
+                  text: 'Please wait while we complete the process.',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  }
+                });                                        
+               $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/delete-organization-invoice-bill",                                           
+                   data: {                                               
+                       params : params
+                   },
+                   success: function(response) {
+                      // display_consultation_summary(app_id,patient_id);
+                      Swal.fire({
+                           title: 'Successful!',
+                           text: response.message,
+                           icon: 'success',
+                           timer: 2000
+                         });
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+               }
+            });
+
+    }
+    
+    function finalizeOrganInvoice(id){
+        
+        Swal.fire({
+           title: 'Finalize This Invoice ?',
+           text: 'Are you sure that all the bills have been collated successfully, and ready to be sent to the organization',
+           icon: 'question',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes, Finalize!'
+         }).then((result) => {
+           if (result.isConfirmed) {
+               //
+                 Swal.fire({
+                  title: 'Finalizing Invoice ..',
+                  text: 'Please wait while we complete the process.',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  }
+                });                                        
+               $.ajax({
+                   headers:{
+                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                   },
+                   type:'post',
+                   url: "/admin/finalize-organization-invoice/"+id,                                           
+                   data: {                                               
+                      
+                   },
+                   success: function(response) {
+                      // display_consultation_summary(app_id,patient_id);
+                      Swal.fire({
+                           title: 'Successful!',
+                           text: response.message,
+                           icon: 'success',
+                           timer: 2000
+                         });
+                         window.location.reload();
+                   },
+                   error: function(xhr) {
+                       showpop(xhr.responseJSON.message || "Error booking appointment","error");
+                   }
+               });  // end ajax submit slot 
+               }
+            });
+
+    }
+    

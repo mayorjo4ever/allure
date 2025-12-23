@@ -403,17 +403,42 @@
                             </a>
                         </li>-->
                         @endcan 
-                        
-                        @can('view-organizations')
-                        <li>
-                            <a href="{{url('admin/organizations')}}"  @if(Session::get('subpage')==="organizations")  class="mm-active"  @endif>
-                                <i class="metismenu-icon">
-                                </i>Organizational Bodies
-                            </a>
-                        </li>@endcan 
                     </ul>
                 </li>   @endcan
                
+             @can('view-organizations')
+              <li>
+                    <a href="#" @if(Session::get('page')==="organizations") class="mm-active" @endif >
+                        <i class="metismenu-icon pe-7s-home"></i>
+                       HMO Management
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    <ul  @if(Session::get('page')==="organizations") class="mm-show" @endif>
+                       @can('view-organizations')
+                        <li>
+                            <a href="{{url('admin/organizations')}}"  @if(Session::get('subpage')==="organizations")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> List of HMO's
+                            </a>
+                        </li>@endcan 
+                        
+                        <li>
+                            <a href="{{url('admin/organizations/invoices/unpaid/')}}"  @if(Session::get('subpage')==="unpaid-invoices")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> Unpaid HMO Invoices
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url('admin/organizations/invoices/paid/')}}"  @if(Session::get('subpage')==="paid-invoices")  class="mm-active"  @endif>
+                                <i class="metismenu-icon">
+                                </i> Paid HMO Invoices
+                            </a>
+                        </li>
+                      
+                    </ul>
+              </li>
+              @endcan
+                
                 @can('view-reports')
                  <li>
                     <a href="#" @if(Session::get('page')==="reports") class="mm-active" @endif >
