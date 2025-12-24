@@ -120,8 +120,10 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::post('finalize-organization-invoice/{id}', 'InsuranceController@finalize_organization_invoice');
         
         # organization Invoices 
-        Route::get('organizations/invoices/unpaid/{invoice_no?}', 'InsuranceController@organizations_unpaid_onvoices');
-        Route::get('organizations/invoices/paid/{invoice_no?}', 'InsuranceController@organizations_paid_onvoices');
+        Route::get('organizations/invoices/unpaid/{invoice_no?}', 'InsuranceController@organizations_unpaid_invoices');
+        Route::get('download/invoices/unpaid/{invoice_no}/pdf', 'InsuranceController@download_organization_unpaid_invoice');
+        Route::get('organizations/invoices/paid/{invoice_no?}', 'InsuranceController@organizations_paid_invoices');
+        
         
         /** manage customers **/
         Route::get('customers','UserController@students');

@@ -26,4 +26,9 @@ class PaymentInvoice extends Model
     {
         return $this->belongsTo(Organization::class,'organization_id');
     }
+  
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class,'appointment_id');
+    }
 }

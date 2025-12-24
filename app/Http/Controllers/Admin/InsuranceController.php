@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
+use PDF;
+use function abort;
+use function new_org_invoice_no;
 use function redirect;
 use function response;
 use function view;
@@ -275,21 +278,61 @@ class InsuranceController extends Controller
         
     }
     
-    public function organizations_unpaid_onvoices($invoice_no = null) {
+    public function organizations_unpaid_invoices($invoice_no = null) {
         // $organization = Organization::with('closedInvoices.user','openedInvoices.bill')->findOrFail($id);        
         $invoices = PaymentInvoice::where('status','closed')
                 ->where('payment_completed','0')
                 ->distinct()->select('invoice_number','organization_id')           
                 ->get(); 
         
+        if($invoice_no !=""):
+            $organ_invoice = PaymentInvoice::with(['user',
+                'bill',
+                'appointment.investigations.template',
+                'appointment.prescriptions.item'                
+                ])
+                ->where('invoice_number',$invoice_no)                
+                ->where('status','closed')                
+                ->get(); 
+                $organ_id= PaymentInvoice::select('organization_id')->where('invoice_number',$invoice_no)->first();  
+                $organization = Organization::find($organ_id->organization_id);
+               # print "<pre>";   print_r($organ_invoice->toarray()); die;   
+            $page_info = ['title'=>$organization->name."'s Bills - #".$invoice_no,'icon'=>'pe pe-7s-cash','sub-title'=>'Invoice Bills To be Paid'];       
+           Session::put('page','organizations'); Session::put('subpage','organizations');
+           return view('admin.insurance.organ_unpaid_invoice_bills',compact('page_info','organ_invoice','organization','invoice_no'));
+     
+        endif;        
+        
         # print "<pre>";   print_r($invoices->toarray()); die;   
         $page_info = ['title'=>"List of Unpaid Invoices ",'icon'=>'pe pe-7s-cash','sub-title'=>'Invoice To be Paid'];       
         Session::put('page','organizations'); Session::put('subpage','unpaid-invoices');
-        return view('admin.insurance.unpaid_invoices',compact('page_info','invoices'));
-    
+        return view('admin.insurance.unpaid_invoices',compact('page_info','invoices'));    
     }
     
-    public function organizations_paid_onvoices($invoice_no = null) {
+      public function download_organization_unpaid_invoice($invoice_no) {
+        $page_info = ['title'=>"Result Download",'icon'=>'pe-7s-file','sub-title'=>'Invoice Notes '];
+       # print "<pre>";   print_r($invoice_no); // die;
+         $organ_invoice = PaymentInvoice::with(['user',
+            'bill',
+            'appointment.investigations.template',
+            'appointment.prescriptions.item'                
+            ])
+            ->where('invoice_number',$invoice_no)                
+            ->where('status','closed')                
+            ->get(); 
+            $organ_id = PaymentInvoice::select('organization_id')->where('invoice_number',$invoice_no)->first();  
+            $organization = Organization::find($organ_id->organization_id);
+            $account = Account::where('active',1)->first(); 
+           #   print "<pre>";   print_r($organ_invoice->toarray()); die;   
+             
+        
+        $filename = str_replace("/","",$invoice_no)."_Invoice.pdf";
+        $pdf = PDF::loadView('admin.insurance.download.unpaid_invoice',compact('organ_invoice','invoice_no','organization','account','page_info'));
+        return $pdf->download($filename);
+
+     }
+    
+    public function organizations_paid_invoices($invoice_no = null) {
         
     }
     
@@ -348,3 +391,7 @@ class InsuranceController extends Controller
      
 }
 
+## Birth of Jesus 
+## gal 1:6-9
+## luk 1:5-10
+## luk 2:8

@@ -315,7 +315,7 @@ if (! function_exists('number_to_words')) {
         $naira = floor($amount);
         $kobo  = round(($amount - $naira) * 100);
 
-        $words = $numberTransformer->toWords($naira) . ' naira';
+        $words = $numberTransformer->toWords($naira) . ' naira only';
 
         if ($kobo > 0) {
             $words .= ' and ' . $numberTransformer->toWords($kobo) . ' kobo';

@@ -33,14 +33,14 @@
             <tbody> @foreach($invoices as $k=>$invoice )
             <tr class="{{-- ($invoice['status']==1) ?"active":"inactive" --}}">
                 <td class="text-muted pl-4"># {{ $k+1}} </td>               
-                <td> {{ Organization::name($invoice->organization_id)}}  </td>                
-                <th> <a href="{{url('admin/invoice/'.$invoice->id.'/bills')}}" target="_blank"><span class="badge border border-1 border-primary p-3 font-16">
+                <td class="font-weight-600">  {{ Organization::name($invoice->organization_id)}}  </td>                
+                <td class="font-weight-600"> <a target="_blank" href="{{url('admin/organizations/invoices/unpaid/'.$invoice->invoice_number)}}" target="_blank"><span class="badge border border-1 border-primary p-3 font-16">
                         {{$invoice->invoice_number}} 
                      </span></a>
-                </th>
-                <th>&#8358; {{number_format(calculate_invoice_bill($invoice->invoice_number))}}</th>
-                <th> 0.0 </th>             
-                <th> 0.0 </th>             
+                </td>
+                <td class="font-weight-600" >&#8358; {{number_format(calculate_invoice_bill($invoice->invoice_number))}}</td>
+                <td> 0.0 </td>             
+                <td> 0.0 </td>             
                 
              
               @endforeach

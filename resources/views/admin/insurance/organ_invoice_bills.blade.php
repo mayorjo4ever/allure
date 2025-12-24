@@ -25,7 +25,7 @@
                 <th>Patient</th>        
                 <th>Amount</th>        
                 <th>Ticket No</th>        
-                <th>Date</th>
+                <th>Date </th>
                 @can('delete-invoice-bill') <th>Delete </th> @endcan
                 <th>Last Updated </th>
             </tr>
