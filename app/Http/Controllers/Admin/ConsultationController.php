@@ -251,7 +251,6 @@ class ConsultationController extends Controller
                 ->get(); 
         endif;
         
-        
          # print "<pre>"; 
             ## print_r($doctors); die;        
         return view('admin.appointments.confirmed_apps',compact('page_info','appointments')); #
@@ -462,6 +461,31 @@ class ConsultationController extends Controller
             'status'=>'success',
             'message'=> " Report Successfully  Saved "            
         ]);
+    }
+    
+    public function save_patient_diagnostics(Request $request,$patient_id){
+        #print "<pre>"; print_r($request->all()); exit; 
+        if($request->ajax()):
+            if($request->diagnosis == ""):
+                return response()->json([
+                    'status'=>'error',
+                    'message'=>'Please Enter What you are Diagonising !!'
+                    ]);  endif;
+           
+            Consultation::updateOrCreate(
+                ['appointment_id'=>$request->app_id,
+                    'user_id'=>$request->patient_id],
+                ['diagnosis'=>$request->diagnosis,
+                 'regno'=>$request->regno,
+                 'doctor_id'=>Auth('admin')->user()->id,
+                 'visit_date'=>Carbon::now()]
+                );
+        
+            return response()->json([
+                'status'=>'success',
+                'message'=> " Diagnosis Successfully  Saved "            
+            ]);
+        endif;
     }
     
     public function display_consultation_summary(Request $request) {

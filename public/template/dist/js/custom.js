@@ -3227,7 +3227,27 @@ function addConsultTasks(task="notes"){
             }
     });    
 }
- 
+
+    
+    function save_diagnosis(){
+        var patient_id = $('input#patient').val(); var regno = $('#regno').val(); // user id
+        var app_id = $('#app_id').val(); // appointment id
+        var btn = ".diagnosis-btn"; var diagnosis = $('#patient_diagnosis').val(); 
+       //  console.log(patient_id); exit; 
+         $.ajax({
+            headers:{ 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content') },
+            url: '/admin/appointments/save-patient-diagnosis/'+patient_id,
+            type: 'POST', data: { patient_id:patient_id,app_id:app_id,diagnosis:diagnosis, regno:regno },
+            beforeSend:function(){ startLoader(btn);  },
+            success: function (response) { stopLoader(btn);
+                showpop(response.message,response.status);
+            }, error:function(jhx,textStatus,errorThrown){ stopLoader(btn);
+                    console.log(""+textStatus+' - '+errorThrown);
+                    checkStatus(jhx.status);
+                }
+        });    
+    }
+
     function display_consultation_summary(app_id,patient_id){
      elem = $(".doctors_consultation_summary");        
      general_body = $(".consult-body-container");

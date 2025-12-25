@@ -22,6 +22,8 @@
             <td> Patient:&nbsp; <b>{{ $invoice->user->surname}} {{ $invoice->user->firstname}} </b>
                 <br/>Regno:&nbsp; <b>{{ $invoice->user->regno}}</b> 
                 <br/>HMO:&nbsp;<b>{{ $invoice->user->enrole_no}}</b> 
+                <br/>Phone No:&nbsp;<b>0{{ $invoice->user->phone}}</b> 
+                <br/>Diagnosis:&nbsp;<b>{{ '...'}}</b> 
                 <br/>Ticket No:&nbsp;<b>  {{ $invoice->bill->ticketno}} </b>
             </td>  
 
@@ -56,7 +58,7 @@
                 </ol>
                @endif
             </td>
-            <th>N{{number_format($invoice->amount)}}   </th>
+            <th>N{{number_format($invoice->amount)}}</th>
         </tr>
           @php $bills+=$invoice->amount; $discounts +=$invoice->discount; @endphp 
           @endforeach
@@ -69,8 +71,8 @@
     </table>
  </div>
 
-<p class="text-uppercase font-weight-600 pt-4" style="border: 0;"> 
-    <span class="h6 font-weight-700" style="font-size:16px">Receiving Bank Account: &nbsp;&nbsp;&nbsp; <strong> {{$account->bank}}</strong></span><br/>
-    <span class="h6 font-weight-700" style="font-size:16px"> Account Name: &nbsp;&nbsp;&nbsp;<strong> {{ $account->name}}</strong></span><br/> 
-    <span class="h6 font-weight-700" style="font-size:16px"> Account NO: &nbsp;&nbsp;&nbsp;<strong>{{ $account->number}}</strong></span><br/>    
-</p>
+<footer>
+    <div class="col-md-12 font-weight-600" style="padding-top:60px;">
+       Date Printed : {{ \Carbon\Carbon::now()->toDayDateTimeString() }}
+    </div>
+</footer>

@@ -43,8 +43,7 @@ table th p {
            
           @include('admin.insurance.download.header')
           @include('admin.insurance.download.unpaid_invoice_body')
-          @include('admin.insurance.download.comment_footer')
-             
+               
       </div>
       <!-- col-md-12 -->
 

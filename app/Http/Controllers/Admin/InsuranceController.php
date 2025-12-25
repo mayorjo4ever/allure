@@ -313,7 +313,7 @@ class InsuranceController extends Controller
         $page_info = ['title'=>"Result Download",'icon'=>'pe-7s-file','sub-title'=>'Invoice Notes '];
        # print "<pre>";   print_r($invoice_no); // die;
          $organ_invoice = PaymentInvoice::with(['user',
-            'bill',
+            'bill','appointment.consultation',
             'appointment.investigations.template',
             'appointment.prescriptions.item'                
             ])
@@ -322,12 +322,13 @@ class InsuranceController extends Controller
             ->get(); 
             $organ_id = PaymentInvoice::select('organization_id')->where('invoice_number',$invoice_no)->first();  
             $organization = Organization::find($organ_id->organization_id);
-            $account = Account::where('active',1)->first(); 
+           // $account = Account::where('active',1)->first(); 
            #   print "<pre>";   print_r($organ_invoice->toarray()); die;   
              
-        
-        $filename = str_replace("/","",$invoice_no)."_Invoice.pdf";
-        $pdf = PDF::loadView('admin.insurance.download.unpaid_invoice',compact('organ_invoice','invoice_no','organization','account','page_info'));
+        $fullname = str_replace(" ","_",$organization->name)."_".str_replace("/","",$invoice_no);         
+        $filename = $fullname."_Invoice.pdf";
+        ## removed ,'account' from compact
+        $pdf = PDF::loadView('admin.insurance.download.unpaid_invoice',compact('organ_invoice','invoice_no','organization','page_info'));
         return $pdf->download($filename);
 
      }

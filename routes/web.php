@@ -172,6 +172,7 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         ## Inside Consultation Room 
         Route::post('appointments/save-doctors-comment/{patient_id}/{app_id}','ConsultationController@save_doctors_comment');
         Route::post('appointments/save-doctors-question/{patient_id}/{app_id}','ConsultationController@save_doctors_question');
+        Route::post('appointments/save-patient-diagnosis/{patient_id}','ConsultationController@save_patient_diagnostics');
         Route::post('appointments/display-consultation-summary','ConsultationController@display_consultation_summary');
         Route::post('appointments/display-dummy-consultation-summary','ConsultationController@display_dummy_consultation_summary');
         Route::post('appointments/add-patient-investigation/{patient_id}/{app_id}','ConsultationController@add_patient_investigation');
