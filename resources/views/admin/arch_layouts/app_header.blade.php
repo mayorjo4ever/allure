@@ -44,21 +44,13 @@
                                 <i class="nav-link-icon fa fa-database"> </i>
                                 <span class="font-weight-600">Create New Ticket</span>
                             </a>
-                        </li>@endcan
-
-                        @can('view-ticket')
-                        <li class="nav-item">
-                            <a href="{{url('admin/tickets')}}" class="nav-link">
-                                <i class="nav-link-icon fa fa-database"> </i>
-                                <span class="font-weight-600">View Tickets</span>
-                            </a>
-                        </li>@endcan
+                        </li>@endcan                 
 
                           @can('view-ticket-payment')
                         <li class="btn-group nav-item">
                             <a href="{{url('admin/ticket-payment')}}" class="nav-link">
                                 <i class="nav-link-icon pe-7s-credit pe-2x text-dark"></i>
-                                <span class="font-weight-600"> Ticket Payment </span>
+                                <span class="font-weight-600"> BIll Payment </span>
                             </a>
                         </li>@endcan
 
@@ -69,6 +61,15 @@
                                 <span class="font-weight-600">Create New Customer</span>
                             </a>
                         </li>@endcan
+                        
+                         @can('view-appointments')
+                        <li class="nav-item">
+                            <a href="{{url('admin/appointments/completed/recents')}}" class="nav-link">
+                                <i class="nav-link-icon fa fa-users"> </i>
+                                <span class="font-weight-600">Recent Consultants </span>
+                            </a>
+                        </li>@endcan
+                        
                     </ul>        </div>
                 <div class="app-header-right">
                     <div class="header-btn-lg pr-0">

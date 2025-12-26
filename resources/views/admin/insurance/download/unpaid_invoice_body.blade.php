@@ -23,7 +23,7 @@
                 <br/>Regno:&nbsp; <b>{{ $invoice->user->regno}}</b> 
                 <br/>HMO:&nbsp;<b>{{ $invoice->user->enrole_no}}</b> 
                 <br/>Phone No:&nbsp;<b>0{{ $invoice->user->phone}}</b> 
-                <br/>Diagnosis:&nbsp;<b>{{ '...'}}</b> 
+                <br/>Diagnosis:&nbsp;<b>{{ $invoice->appointment->consultation->diagnosis ?? '--'}}</b> 
                 <br/>Ticket No:&nbsp;<b>  {{ $invoice->bill->ticketno}} </b>
             </td>  
 

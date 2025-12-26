@@ -830,5 +830,28 @@ class ConsultationController extends Controller
         endif; 
     }
     
+    public function recent_appointments(Request $request){
+        Session::put('page','services'); Session::put('subpage','all_apps');        
+        $page_info = ['title'=>'Recent Consultants','icon'=>'pe-7s-clock','sub-title'=> "List of Patients who have just completed their Appointment"];
+        
+        if(Session::get('app_staus') == null):
+            Session::put('app_staus','completed');
+        endif;
+        
+        if($request->isMethod('post')):
+             Session::put('app_staus',$request->app_status);
+        endif;
+        
+        $appointments = Appointment::with(['doctor','patient'])
+                ->where('status','completed')
+                ->orderBy('updated_at','asc')
+                ->paginate(50);
+         
+        # print "<pre>"; print_r($appointments->toarray()); die;
+        $header = "All Appointment";
+        return view('admin.appointments.completed_apps',compact('page_info','appointments','header')); #
+      
+    }
+    
 }
  

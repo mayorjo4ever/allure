@@ -12,7 +12,7 @@ endif;
     <div class="col-md-12">
         <div class="input-group">
             <label class="form-label font-weight-500">Diagnosis &nbsp; &nbsp; </label><br/>
-            <input type="text" id="patient_diagnosis" name="patient_diagnosis" class="form-control" placeholder="What Are You Diagnosing ?"/>
+            <input type="text" id="patient_diagnosis" name="patient_diagnosis" class="form-control" placeholder="What Are You Diagnosing ?" @if(!empty( $appointment->consultation->diagnosis)) value="{{$appointment->consultation->diagnosis}}" @endif  />
             <button type="button" onclick="save_diagnosis()" class="btn btn-primary btn-lg p-2 diagnosis-btn ladda-button" data-style="expand-right">Save &nbsp; <i class="fa fa-save"></i> </button>
         </div>
     </div>

@@ -187,8 +187,9 @@ Route::prefix('/portal')->namespace('App\Http\Controllers\Portal')->group(functi
         Route::get('/appointments/pending-investigations','TestController@pending_investigations');
         Route::post('delete-patient-investigation','ConsultationController@delete_patient_investigation');
         Route::post('delete-patient-prescription','ConsultationController@delete_patient_prescription');
-       
         
+        
+       Route::match(['get','post'],'appointments/completed/recents','ConsultationController@recent_appointments');               
         
         ## VIEW AND PROCESS ALL INVESTIGATIONS 
         
