@@ -44,7 +44,7 @@ $(function(){
       show_pending_tickets(); 
     }
     
-    hideInactiveTables(); add_tinymce();
+    hideInactiveTables(); //add_tinymce();
 
     var log_messager = $("#login-message"); log_messager.hide('fast');
     $('#loginForm').submit(function(ev){ ev.preventDefault();
@@ -2063,10 +2063,9 @@ function save_param_specimen_result() {
             toolbar: {
                 items: [
                     'undo', 'redo', '|',
-                    'heading', 'bold', 'italic', 'underline', '|',
+                    'heading', 'bold', 'italic', '|',
                     'link', 'blockQuote', '|',
-                    'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
-                    'sourceEditing'
+                    'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',                     
                 ]
             },
             heading: {
@@ -3088,10 +3087,12 @@ function getPatientInfo(info_type="consultation"){
     });    
 }
 
+if($('#user_id').length >0){
  let custom_id = $('#user_id').val();
     if(custom_id !=="") {
         populateCustomerBiodata(custom_id);
     }
+}
             
 function populateCustomerBiodata(custom_id){
     btn = $(".ajaxLoader");
