@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('invoice_payment_logs', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number'); 
+            $table->bigInteger('organization_id');
+            $table->double('amount_paid');
+            $table->enum('paymode', ['cash','pos','transfer']);
+            $table->dateTime('date_paid');
+            $table->integer('collected_by');
             $table->timestamps();
         });
     }

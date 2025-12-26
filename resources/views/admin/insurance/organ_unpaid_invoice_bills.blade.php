@@ -34,6 +34,7 @@
                 <td> Patient:&nbsp; <b>{{ $invoice->user->surname}} {{ $invoice->user->firstname}} </b>
                     <br/>Regno:&nbsp; <b>{{ $invoice->user->regno}}</b> 
                     <br/>HMO:&nbsp;<b>{{ $invoice->user->enrole_no}}</b> 
+                    <br/>Diagnosis:&nbsp;<b>{{ $invoice->appointment->consultation->diagnosis ?? '--'}}</b> 
                     <br/>Ticket No:&nbsp; <a href="{{url('admin/print-invoice/'.base64_encode($invoice->bill->ticketno))}}" target="_blank"><span class="font-weight-600">
                        {{ $invoice->bill->ticketno}} </span></a>
                 
@@ -88,8 +89,11 @@
             </div>
                 
             <div class="col-md-12">
-                <a href="{{url('admin/download/invoices/unpaid/'.$invoice_no.'/pdf')}}" target="_blank" class="btn btn-light pull-right ">
+                <a href="{{url('admin/download/invoices/unpaid/'.$invoice_no.'/pdf')}}" target="_blank" class="btn btn-danger  font-weight-700  pull-right ">
                     Download PDF &nbsp; <i class="fa fa-file-pdf fa-2x"></i>
+                </a> 
+                <a href="{{url('admin/download/invoices/unpaid/'.$invoice_no.'/pdf')}}" target="_blank" class="btn btn-warning text-white font-weight-700 pull-right ml-3 mr-3 ">
+                    Make Payment &nbsp;  &#8358; {{number_format($bills - $discounts)}}&nbsp;<br/> <i class="pe pe-7s-cash pe-3x"></i>
                 </a>
             </div>
            
