@@ -17,8 +17,9 @@ class Organization extends Model
         return $this->hasMany(PaymentInvoice::class, 'organization_id')
                     ->where('status', 'closed');
     }
-    public static function name($id){
-        $sql = Organization::findOrFail($id);
-        return $sql->name;
-    }
+    
+//    public static function name($id){
+//        $sql = Organization::findOrFail($id);
+//        return $sql->name;
+//    }
 }

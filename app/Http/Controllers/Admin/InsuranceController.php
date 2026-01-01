@@ -343,6 +343,7 @@ class InsuranceController extends Controller
         if($id==''){
            $page_info = ['title'=>'Create New Organizational Body','icon'=>'fa fa-users','sub-title'=>'Create / Edit  Bank Account'];
            $organization = new Organization(); $message = "Organizational Body Successfully Saved";
+           //print "<pre>";   print_r($organization->toarray()); die; 
        }
        else { ##
            $page_info = ['title'=>'Edit Organizational Body ','icon'=>'fa fa-group','sub-title'=>' '];

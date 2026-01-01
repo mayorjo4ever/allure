@@ -8,6 +8,7 @@ use App\Models\CustomerTicket;
 use App\Models\DoctorAvailability;
 use App\Models\FamilyGroup;
 use App\Models\InvestigationTemplate;
+use App\Models\Organization;
 use App\Models\PaymentInvoice;
 use App\Models\User as User2;
 use Carbon\Carbon;
@@ -346,4 +347,9 @@ function calculate_invoice_bill($invoice_number){
              ->sum('discount');
     
        return $amounts - $discounts;
+}
+
+function organization_name($id){
+    $sql = Organization::findOrFail($id);
+    return $sql->name;
 }
