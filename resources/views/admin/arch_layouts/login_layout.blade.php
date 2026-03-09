@@ -57,7 +57,7 @@
                 
                 
     $(function(){
-      var log_messager = $("#login-message"); log_messager.hide('fast');
+    var log_messager = $("#login-message"); log_messager.hide('fast');
     $('#loginForm').submit(function(ev){ ev.preventDefault();
         var l = Ladda.create(document.querySelector('.login-btn'));  
         var formdata = $(this).serialize(); 

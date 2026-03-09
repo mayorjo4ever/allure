@@ -4,19 +4,36 @@
 ?>
 
 
-@can('view-calendar-widget')
-<div class="row">
-    <div class="col-md-6 col-xl-4">
+
+<div class="row">  
+   <div class="col-md-6 col-xl-4 float-left">
+       @can('view-calendar-widget')
+       <div class="col-12">
       <div class="card mb-3 widget-content bg-grow-early">
           <center> <div class="calendar w-100" ></div> </center>
-      </div>
-   </div>
-</div>@endcan
+      </div></div>@endcan
+      
+      @can('view-total-payment-widget')
+        <div class="col-12">
+           <div class="card mb-3 widget-content bg-grow-early">
+              <div class="widget-content-wrapper text-white">
+                 <div class="widget-content-left">
+                    <div class="widget-heading text-uppercase font-weight-900">Sell Frames, Lenses & Drugs </div>
+                    <div class="widget-subheading font-weight-700 text-dark text-uppercase"> for the year {{Carbon::now()->year}} </div>
+                 </div>
+                 <div class="widget-content-right">
+                    <div class="widget-numbers text-white"><span> {{number_format(total_bill_paid(Carbon::now()->year))}}</span></div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      @endcan
 
-
-<div class="row">
-  @can('view-total-customer-widget')
-   <div class="col-md-6 col-xl-4">
+  </div>
+  
+  <div class="col-md-6 col-xl-4  float-left">
+      @can('view-total-customer-widget')
+      <div class="col-12">
       <div class="card mb-3 widget-content bg-midnight-bloom">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -28,10 +45,10 @@
             </div>
          </div>
       </div>
-   </div> @endcan
-
+   </div> @endcan 
+   
    @can('view-all-appointment-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-midnight-bloom">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -46,7 +63,7 @@
     </div> @endcan
 
     @can('view-completed-ticket-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-grow-early">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -59,9 +76,9 @@
          </div>
       </div>
    </div> @endcan
-
+   
    @can('view-pending-appointment-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-sunny-morning">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -73,10 +90,13 @@
             </div>
          </div>
       </div>
-   </div> @endcan
-
-   @can('view-highest-test-widget')
-   <div class="col-md-6 col-xl-4">
+   </div> @endcan  
+   
+  </div> <!-- ./ xl-4 -->
+  
+  <div class="col-md-6 col-xl-4">
+      @can('view-highest-test-widget')
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-arielle-smile">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -89,9 +109,10 @@
          </div>
       </div>
    </div> @endcan
-
+   
+   
    @can('view-total-payment-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-arielle-smile">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -105,8 +126,9 @@
       </div>
    </div>  @endcan
    
+   
  @can('view-total-pending-payment-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-love-kiss">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -121,7 +143,7 @@
    </div> @endcan
    
    @can('view-total-payment-widget')
-   <div class="col-md-6 col-xl-4">
+   <div class="col-12">
       <div class="card mb-3 widget-content bg-grow-early">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
@@ -134,7 +156,9 @@
          </div>
       </div>
    </div>
-@endcan
+    @endcan
 
+  </div>
+   
 
 </div>
