@@ -154,7 +154,7 @@ class ConsultationController extends Controller
             'doctor_id' => $request->doctor_id,
             'user_id'   => $request->user,    #  auth()->id(), // logged in patient
             'appointment_date' => $appointmentDateTime,
-            'status' => 'pending',
+            'status' => 'checked_in',
         ]);
 
         return response()->json([
