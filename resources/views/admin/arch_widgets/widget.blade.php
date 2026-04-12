@@ -67,7 +67,7 @@
       <div class="card mb-3 widget-content bg-grow-early">
          <div class="widget-content-wrapper text-white">
             <div class="widget-content-left">
-                <div class="widget-heading font-weight-700 text-uppercase"> <a class="text-white" style="opacity:1" target="_blank" href="{{url('admin/tickets')}}">Total Completed Tickets </a></div>
+                <div class="widget-heading font-weight-700 text-uppercase"> <a class="text-white" style="opacity:1" target="_blank" href="{{url('admin/appointments/completed/recents')}}">Finalized Appointments </a></div>
                <div class="widget-subheading font-weight-700 text-white text-uppercase"> for the year {{$this_year}} </div>
             </div>
             <div class="widget-content-right">

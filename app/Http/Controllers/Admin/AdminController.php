@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\ImportAdmins;
 use App\Jobs\SendBirthdaySmsJob;
 use App\Models\Admin;
+use App\Models\Appointment;
 use App\Models\CustomerSpecimen;
 use App\Models\CustomerTicket;
 use App\Models\DoctorAvailability;
@@ -58,8 +59,8 @@ class AdminController extends Controller
        $customers = User::count();
        ## tickets created
        $this_year = Carbon::now()->year;
-       $tickets_created = CustomerTicket::where(['create_mode'=>'completed','year'=>$this_year])->count();
-       $completed_tickets = CustomerTicket::where(['create_mode'=>'completed','year'=>$this_year,'finalized'=>'yes'])->count();
+       $tickets_created = Appointment::where('appointment_date','LIKE', '%'.$this_year.'%' )->count();
+       $completed_tickets = Appointment::where('status','completed')->where('appointment_date','LIKE', '%'.$this_year.'%')->count();
        $pending_tickets = $tickets_created - $completed_tickets;
        ## get highest test ever done this year
 
